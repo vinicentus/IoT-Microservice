@@ -136,3 +136,6 @@ secrets/
 private_key.pem
 public_key.pem
 secret.key
+
+# database
+sensor_data.db
