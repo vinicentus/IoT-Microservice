@@ -130,6 +130,7 @@ dmypy.json
 
 # idea
 .idea/
+.idea/workspace.xml
 
 # public & private keys/ secrets
 app/secrets/
