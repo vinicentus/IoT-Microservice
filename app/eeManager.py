@@ -202,4 +202,30 @@ def load_private_key(path):
 
 
 def generate_private_public_keys():
-    pass
+    private_key = rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=2048,
+        backend=default_backend()
+    )
+    public_key = private_key.public_key()
+
+    return private_key, public_key
+
+
+def write_keys_to_file(path, file_name):
+    private, public = generate_private_public_keys()
+    private_pem = private.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption()
+    )
+    with open('private_key.pem', 'wb') as f:
+        f.write(private_pem)
+
+    public_pem = public.public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+
+    with open('public_key.pem', 'wb') as f:
+        f.write(public_pem)

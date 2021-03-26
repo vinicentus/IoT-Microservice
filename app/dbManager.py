@@ -1,5 +1,7 @@
 import sqlite3
 import os
+
+
 path = os.path.dirname(os.path.abspath(__file__))
 db = os.path.join(path, 'sensor_data.db')
 
