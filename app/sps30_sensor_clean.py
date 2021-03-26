@@ -1,5 +1,5 @@
 import time
-from .sps30_driver import sps30
+from sps30_driver import sps30
 
 device_port = "/dev/ttyUSB0"
 startup_time = 8

@@ -1,7 +1,7 @@
 import time
 import numpy as np
-from .dbManager import *
-from .sps30_driver import sps30
+from dbManager import *
+from sps30_driver import sps30
 
 
 device_port = "/dev/ttyUSB0"
