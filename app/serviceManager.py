@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3.8
 import time
 import datetime
 import ast
