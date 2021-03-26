@@ -1,6 +1,6 @@
 import time
 import numpy as np
-from app.dbManager import *
+from .dbManager import *
 from .sps30_driver import sps30
 
 
