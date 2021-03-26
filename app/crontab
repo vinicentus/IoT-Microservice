@@ -1,4 +1,6 @@
+# this is an example file and the cd /path/... needs to be change to match your local setup
 # add to sudo crontab -e
+
 */15 * * * * cd /path/to/IoT-Microservice/app/ && ./sps30_collect_data.py
-3 18 * * 6 cd /home/matti/IoT-Microservice/app/ && ./sps30_sensor_clean.py
-# blank line needed to function properly
+3 18 * * 6 cd /path/to/IoT-Microservice/app/ && ./sps30_sensor_clean.py
+# blank line needed att end of file to function properly
