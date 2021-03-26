@@ -228,8 +228,9 @@ def write_keys_to_file(path, private_key_name, public_key_name):
     )
 
     parent_dir = os.path.dirname(os.path.abspath(__file__))
-    private_key_path = os.path.join(parent_dir, private_key_name)
-    public_key_path = os.path.join(parent_dir, public_key_name)
+    new_dir = os.path.join(parent_dir, "secrets")
+    private_key_path = os.path.join(new_dir, private_key_name)
+    public_key_path = os.path.join(new_dir, public_key_name)
 
     with open(private_key_path, 'wb') as f:
         f.write(private_pem)
