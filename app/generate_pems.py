@@ -1,3 +1,4 @@
+#!/home/matti/IoT-Microservice/venv/bin/python3.8
 from eeManager import write_keys_to_file, generate_private_public_keys
 import os
 
