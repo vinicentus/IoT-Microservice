@@ -72,7 +72,8 @@ def get_entries_date_range(start, stop):
 
 
 if __name__ == "__main__":
-    # add_entry('2021-3-22', '13:37:00', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-    print(get_all_entries())
-    #print(get_entries_from_date('2021-3-22'))
-    # get_entries_date_range(start='2021-3-19', stop='2021-3-21')
+    the_records = get_all_entries()
+    for row in the_records:
+        print(row)
+    exit()
+

@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8395e377-c123-4014-9248-d172d1580c69" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/crontab" beforeDir="false" afterPath="$PROJECT_DIR$/app/crontab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dbManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dbManager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
