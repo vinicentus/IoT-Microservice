@@ -92,7 +92,10 @@ if __name__ == "__main__":
     parser.add_argument('start')
     parser.add_argument('stop')
     args = parser.parse_args()
-
+    print(args.start)
+    print(type(args.start))
+    print(args.stop)
+    print(type(args.stop))
     runtime = execute(args.start, args.stop, the_key)
 
 
