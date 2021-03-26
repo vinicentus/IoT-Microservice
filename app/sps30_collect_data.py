@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3.8
 import time
 import numpy as np
 from dbManager import *

@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3.8
 import time
 from sps30_driver import sps30
 

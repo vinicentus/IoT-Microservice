@@ -1,5 +1,4 @@
 # add to sudo crontab -e
-0 12 * * * cd /my/dir/script && /usr/local/bin/python3 script.py
-15 * * * * cd /my/dir/script && /usr/local/bin/python3.8 /home/matti/IoT-Microservice/app/sps30_collect_data.py
-3 18 * * 6 cd /my/dir/script && /usr/local/bin/python3.8 /home/matti/IoT-Microservice/app/sps30_sensor_clean.py
+/15 * * * * cd /home/matti/IoT-Microservice/app/ && /usr/local/bin/python3.8 sps30_collect_data.py
+3 18 * * 6 cd /home/matti/IoT-Microservice/app/ && /usr/local/bin/python3.8 sps30_sensor_clean.py
 # blank line needed to function properly
