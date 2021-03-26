@@ -37,7 +37,7 @@ def add_entry(event_date, event_time, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
 
 
 def get_all_entries():
-    sqliteConnection = sqlite3.connect('sensor_data.db')
+    sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
     sqlite_select_query = """SELECT * FROM sensor_output"""
     cursor.execute(sqlite_select_query)
@@ -49,7 +49,7 @@ def get_all_entries():
 
 
 def get_entries_from_date(date):
-    sqliteConnection = sqlite3.connect('sensor_data.db')
+    sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
     sqlite_select_query = "SELECT * FROM sensor_output WHERE date= ?"
     cursor.execute(sqlite_select_query, (date,))
@@ -62,7 +62,7 @@ def get_entries_from_date(date):
 
 
 def get_entries_date_range(start, stop):
-    sqliteConnection = sqlite3.connect('sensor_data.db')
+    sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
     sqlite_select_query = "SELECT * FROM sensor_output WHERE date >= ? AND date <= ?"
     cursor.execute(sqlite_select_query, (start, stop,))
