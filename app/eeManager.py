@@ -199,3 +199,7 @@ def load_private_key(path):
             password=None,
             backend=default_backend())
         return private_key
+
+
+def generate_private_public_keys():
+    pass

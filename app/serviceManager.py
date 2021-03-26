@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3.8
+#!/home/matti/IoT-Microservice/venv/bin/python3.8
 import time
 import datetime
 import ast
