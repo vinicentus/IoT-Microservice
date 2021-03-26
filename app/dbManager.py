@@ -1,8 +1,11 @@
 import sqlite3
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+db = os.path.join(path, 'sensor_data.db')
 
 
 def add_entry(event_date, event_time, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
-    sqliteConnection = sqlite3.connect('sensor_data.db')
+    sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
     print("Connected to SQLite")
 
