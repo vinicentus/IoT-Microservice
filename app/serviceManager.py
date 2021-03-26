@@ -2,6 +2,7 @@
 import time
 import datetime
 import ast
+import argparse
 from datetime import date
 from dbManager import get_entries_date_range, get_entries_from_date
 from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
@@ -87,10 +88,19 @@ def execute(_start_time, _stop_time, public_key=None):
 
 
 if __name__ == "__main__":
-    gogo = execute(a, b, the_key)
-    # gogo = execute(a, b)
-    print(gogo)
-    print('------------------------------')
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-start',
+        dest='start',
+        type=argparse.FileType(mode='r'))
+    parser.add_argument(
+        '-stop',
+        dest='stop',
+        type=argparse.FileType(mode='r'))
+    args = parser.parse_args()
+
+    runtime = execute(args.start, args.stop, the_key)
+
 
     sym_key, data = decode_base64_key_and_data(gogo)
     decryptor = Decryptor(data, sym_key, the_secret)
