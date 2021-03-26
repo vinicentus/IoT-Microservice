@@ -2,10 +2,10 @@ import time
 import datetime
 import ast
 from datetime import date
-from dbManager import get_entries_date_range, get_entries_from_date
-from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
+from app.dbManager import get_entries_date_range, get_entries_from_date
+from app.eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
 # USED TO DEMO DECRYPTION
-from eeManager import Decryptor, load_private_key, decode_base64_key_and_data, decode_base64
+from app.eeManager import Decryptor, load_private_key, decode_base64_key_and_data
 
 a = '2021-1-10'
 b = '2021-3-21'
@@ -15,6 +15,12 @@ max_day_range = 60
 
 
 def date_compare(date1, date2):
+    """
+    Support function for execute()
+    :param date1: start date format '%Y-%m-%d'
+    :param date2: stop date format '%Y-%m-%d'
+    :return: difference between the two dates in days.
+    """
     alpha = time.strptime(date1, "%Y-%m-%d")
     omega = time.strptime(date2, "%Y-%m-%d")
     f_date = date(alpha.tm_year, alpha.tm_mon, alpha.tm_mday)
@@ -24,6 +30,14 @@ def date_compare(date1, date2):
 
 
 def execute(_start_time, _stop_time, public_key=None):
+    """
+    Function that fetches data entries from database. If public_key is provided data is encrypted and then encoded.
+    If no key is provided the data is only encoded.
+    :param _start_time: start date format '%Y-%m-%d'
+    :param _stop_time: stop date format '%Y-%m-%d'
+    :param public_key:
+    :return: encoded data.
+    """
     today = date.today()
 
     # CHECK IF START DATE IS IN THE FUTURE

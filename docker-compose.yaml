@@ -1,0 +1,8 @@
+version: '3'
+services:
+  IoT-Microservice:
+    build: app
+    volumes:
+      - <somthings>:<somthings>
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0

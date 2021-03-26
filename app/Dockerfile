@@ -8,8 +8,8 @@ RUN apt-get install cron
 ADD crontab /etc/cron.d/microservice-cron
 
 # ADD SPS30_DRIVER
-#COPY URL DEST
-#RUN curl
+COPY ./sps30_driver/
+
 
 # ADD SPS30 SCRIPTS AND GRANT EXECUTION RIGHTS
 COPY sps30_sensor_clean.py /sps30_sensor_clean.py
@@ -26,3 +26,12 @@ RUN touch /var/log/cron.log
 
 # RUN CRON ON CONTAINER STARTUP
 CMD cron && tail -f /var/log/cron.log
+
+
+#FROM python:3.7-alpine
+#WORKDIR /app
+#COPY requirements.txt /app
+#RUN pip3 install -r requirements.txt --no-cache-dir
+#COPY . /app
+#ENTRYPOINT ["python3"]
+#CMD ["app.py"]
