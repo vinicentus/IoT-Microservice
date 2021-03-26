@@ -1,4 +1,5 @@
 #!/usr/local/bin/python3.8
+# CHANGE PYTHON PATH TO MATCH YOUR LOCAL INSTALLATION
 import time
 from sps30_driver import sps30
 
