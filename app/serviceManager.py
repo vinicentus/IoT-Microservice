@@ -2,8 +2,8 @@ import time
 import datetime
 import ast
 from datetime import date
-from app.dbManager import get_entries_date_range, get_entries_from_date
-from app.eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
+from dbManager import get_entries_date_range, get_entries_from_date
+from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
 # USED TO DEMO DECRYPTION
 from app.eeManager import Decryptor, load_private_key, decode_base64_key_and_data
 

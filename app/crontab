@@ -1,4 +1,6 @@
 # this is an example file and the cd /path/... needs to be change to match your local setup
+#USING PYTHON VENV: Don't activate the env, but use the python installed in it...
+#/home/ubuntu/scripts/venv/bin/python3
 # add to sudo crontab -e
 
 */15 * * * * cd /path/to/IoT-Microservice/app/ && ./sps30_collect_data.py
