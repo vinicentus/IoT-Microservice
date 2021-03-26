@@ -89,14 +89,14 @@ def execute(_start_time, _stop_time, public_key=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('start', required=True)
-    parser.add_argument('stop', required=True)
+    parser.add_argument('start')
+    parser.add_argument('stop')
     args = parser.parse_args()
 
     runtime = execute(args.start, args.stop, the_key)
 
 
-    sym_key, data = decode_base64_key_and_data(gogo)
+    sym_key, data = decode_base64_key_and_data(runtime)
     decryptor = Decryptor(data, sym_key, the_secret)
     x, y = decryptor.return_key_and_data()
     res = ast.literal_eval(y.decode('utf-8'))
