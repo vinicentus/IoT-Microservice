@@ -89,14 +89,8 @@ def execute(_start_time, _stop_time, public_key=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-start',
-        dest='start',
-        type=argparse.FileType(mode='r'))
-    parser.add_argument(
-        '-stop',
-        dest='stop',
-        type=argparse.FileType(mode='r'))
+    parser.add_argument('start', required=True)
+    parser.add_argument('stop', required=True)
     args = parser.parse_args()
 
     runtime = execute(args.start, args.stop, the_key)
