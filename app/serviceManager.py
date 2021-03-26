@@ -9,10 +9,10 @@ from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, en
 # USED TO DEMO DECRYPTION
 from eeManager import Decryptor, load_private_key, decode_base64_key_and_data
 
-a = '2021-3-25'
-b = '2021-3-26'
-the_key = load_public_key('secrets/public_key.pem')
-the_secret = load_private_key('secrets/private_key.pem')
+a = '2021-3-25' # REMOVE BEFORE IMPLEMENTING
+b = '2021-3-26' # REMOVE BEFORE IMPLEMENTING
+the_key = load_public_key('secrets/public_key.pem') # REMOVE BEFORE IMPLEMENTING
+the_secret = load_private_key('secrets/private_key.pem') # REMOVE BEFORE IMPLEMENTING
 max_day_range = 60
 
 
@@ -95,15 +95,9 @@ if __name__ == "__main__":
     parser.add_argument('start')
     parser.add_argument('stop')
     args = parser.parse_args()
-    #print(args.start)
-    #print(type(args.start))
-    #print(args.stop)
-    #print(type(args.stop))
-    #print(a)
-    #print(type(a))
 
     runtime = execute(args.start, args.stop, the_key)
-
+    print(runtime)
     sym_key, data = decode_base64_key_and_data(runtime)
     decryptor = Decryptor(data, sym_key, the_secret)
     x, y = decryptor.return_key_and_data()
