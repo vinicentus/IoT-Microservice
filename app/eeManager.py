@@ -1,6 +1,7 @@
 import json
 import base64
 import time
+import os
 
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
@@ -212,20 +213,26 @@ def generate_private_public_keys():
     return private_key, public_key
 
 
-def write_keys_to_file(path, file_name):
+def write_keys_to_file(path, private_key_name, public_key_name):
     private, public = generate_private_public_keys()
+
     private_pem = private.private_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.PKCS8,
         encryption_algorithm=serialization.NoEncryption()
     )
-    with open('private_key.pem', 'wb') as f:
-        f.write(private_pem)
 
     public_pem = public.public_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo
     )
 
-    with open('public_key.pem', 'wb') as f:
+    parent_dir = os.path.dirname(os.path.abspath(__file__))
+    private_key_path = os.path.join(parent_dir, private_key_name)
+    public_key_path = os.path.join(parent_dir, public_key_name)
+
+    with open(private_key_path, 'wb') as f:
+        f.write(private_pem)
+
+    with open(public_key_path, 'wb') as f:
         f.write(public_pem)
