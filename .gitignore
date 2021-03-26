@@ -132,7 +132,7 @@ dmypy.json
 ../.idea/
 
 # public & private keys/ secrets
-secrets/
+app/secrets/
 private_key.pem
 public_key.pem
 secret.key
