@@ -98,6 +98,7 @@ if __name__ == "__main__":
 
     runtime = execute(args.start, args.stop, the_key)
     print(runtime)
+
     sym_key, data = decode_base64_key_and_data(runtime)
     decryptor = Decryptor(data, sym_key, the_secret)
     x, y = decryptor.return_key_and_data()

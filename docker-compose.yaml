@@ -6,3 +6,4 @@ services:
       - <somthings>:<somthings>
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
+  second-service:

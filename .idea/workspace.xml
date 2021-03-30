@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8395e377-c123-4014-9248-d172d1580c69" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/crontab" beforeDir="false" afterPath="$PROJECT_DIR$/app/crontab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/sps30_collect_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/sps30_collect_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/sps30_sensor_clean.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/sps30_sensor_clean.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/serviceManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/serviceManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
