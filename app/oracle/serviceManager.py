@@ -7,8 +7,8 @@ from datetime import date
 #from dbManager import get_entries_date_range, get_entries_from_date
 #from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
 
-import dbManager
-import eeManager
+import oracle.dbManager as dbManager
+import oracle.eeManager as eeManager
 # USED TO DEMO DECRYPTION
 #from eeManager import Decryptor, load_private_key, decode_base64_key_and_data
 
