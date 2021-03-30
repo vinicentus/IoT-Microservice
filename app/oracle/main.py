@@ -11,8 +11,8 @@ def perform_task(task, params):
     print('\tORACLE TRIGGERED')
     print(params)
     data = sm.execute(**params)
-    print(data)
-    return str(data)
+    print(type(data))
+    return data
 
 
 # In[ ]:
