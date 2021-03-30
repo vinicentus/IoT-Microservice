@@ -2,7 +2,7 @@
 #!/home/matti/IoT-Microservice/venv/bin/python3.8
 # coding: utf-8
 
-import oracle.serviceManager as sm
+import serviceManager as sm
 # ### PERFORM THE TASK
 
 # In[1]:
