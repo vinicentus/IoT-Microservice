@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8395e377-c123-4014-9248-d172d1580c69" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/serviceManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/serviceManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,18 +35,20 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/app" />
-      <recent name="$PROJECT_DIR$/Sps30-cron-service" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app" />
       <recent name="$PROJECT_DIR$/resources" />
       <recent name="$PROJECT_DIR$/Sps30-cron-service" />
       <recent name="$PROJECT_DIR$/Sps30-cron-service/Sps30_driver" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/oracle" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/app" />
+      <recent name="$PROJECT_DIR$/Sps30-cron-service" />
     </key>
   </component>
   <component name="ServiceViewManager">
@@ -85,10 +84,11 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="320" y="127" key="#Notifications/-221.-1177.1920.1177/0.23.1440.877@0.23.1440.877" timestamp="1616408038316" />
-    <state x="442" y="271" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1616405571184">
+    <state x="442" y="271" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1617100082737">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="442" y="271" key="#com.intellij.fileTypes.FileTypeChooser/-221.-1177.1920.1177/0.23.1440.877@0.23.1440.877" timestamp="1616405571184" />
+    <state x="442" y="271" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1440.877@0.23.1440.877" timestamp="1617100082737" />
     <state x="458" y="215" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1616483829698">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
