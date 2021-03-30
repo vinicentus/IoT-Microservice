@@ -14,8 +14,8 @@ import oracle.eeManager as eeManager
 
 a = '2021-3-25' # REMOVE BEFORE IMPLEMENTING
 b = '2021-3-26' # REMOVE BEFORE IMPLEMENTING
-the_key = load_public_key('secrets/public_key.pem') # REMOVE BEFORE IMPLEMENTING
-the_secret = load_private_key('secrets/private_key.pem') # REMOVE BEFORE IMPLEMENTING
+the_key = eeManager.load_public_key('secrets/public_key.pem') # REMOVE BEFORE IMPLEMENTING
+the_secret = eeManager.load_private_key('secrets/private_key.pem') # REMOVE BEFORE IMPLEMENTING
 max_day_range = 60
 
 
