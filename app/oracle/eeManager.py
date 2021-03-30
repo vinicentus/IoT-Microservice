@@ -3,13 +3,13 @@ import base64
 import time
 import os
 
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.asymmetric import padding
+import cryptography.hazmat.backends.default_backend as default_backend
+import cryptography.hazmat.primitives.asymmetric.rsa as rsa
+import cryptography.hazmat.primitives.serialization as serialization
+import cryptography.hazmat.primitives.hashes as hashes
+import cryptography.hazmat.primitives.asymmetric.padding as padding
 
-from cryptography.fernet import Fernet
+import cryptography.fernet.Fernet as Fernet
 
 
 def encode_base64(data):
