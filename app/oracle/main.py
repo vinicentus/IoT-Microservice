@@ -10,7 +10,7 @@ import oracle.serviceManager as sm
 def perform_task(task, params):
     print('\tORACLE TRIGGERED')
     print(params)
-    data = sm.execute(params)
+    data = sm.execute(**params)
     return data
 
 
