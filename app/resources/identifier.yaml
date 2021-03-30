@@ -1,0 +1,12 @@
+# THE TOKEN COST FOR SERVICES
+service_cost: 2
+
+# OTHER DATA
+manufacturer: Beispiel GmbH
+name: Example-Device
+id: 2071c7736acd16f6cea3727d3b7ecde53f4c2e97b421f3550248e19d7309c636
+category: infrastructure
+secure_boot: false
+firmware:
+    version: '1.0'
+    url: https://192.168.102.94:10000/FirmwareInfo
