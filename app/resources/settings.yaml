@@ -5,8 +5,8 @@ gateway:
 
 # ETHEREUM KEYS
 keys:
-    public: '0x111F0E63AF5cAe144C8EeD9cfdED24E46A8ec798'
-    private: '0x00bc1734b0745bc1f94cfabcef523f2d52df6fff68dafd1378b9e612cff70caa'
+    public: '0x9811D933237E7e7E2b33b3b96cdDC5CceC25Fa8B'
+    private: '0xdeeda6c2bd9c095c59ae5a2633a640d986be9e3d14a1018a8c92084041acaf88'
 
 # WHISPER PARAMS
 whisper:
