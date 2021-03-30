@@ -57,8 +57,6 @@ web3 = blockchain_utils.connect(settings)
 # In[ ]:
 
 
-shh = web3.geth.shh
-
 
 # ### GENERATE A FRESH WHISPER ID
 
