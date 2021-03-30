@@ -63,7 +63,7 @@ web3 = blockchain_utils.connect(settings)
 # In[ ]:
 
 
-whisper_id = shh.newKeyPair()
+
 
 
 # ### CREATE DEVICE OUTLINE
@@ -334,11 +334,6 @@ modification_event = oracle.event('modification')
 # In[ ]:
 
 
-message_event = shh.newMessageFilter({
-    'topic': web3.toHex(text=settings['whisper']['topic']),
-    'symKeyID': settings['whisper']['symkey']
-})
-
 
 # ### MIDDLEWARE EVENT LOOP
 
@@ -369,12 +364,7 @@ try:
             for task in backlog:
                 perform_task(task, func)
 
-        # IF THE DEVICE IS DISCOVERABLE
-        if (discoverable):
 
-            # TRACK WHISPER REQUESTS
-            for event in shh.getMessages(message_event):
-                process_message(event)
 
 except:
     print('\nTHE PROCESS WAS MANUALLY KILLED')             
