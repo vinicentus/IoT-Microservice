@@ -4,10 +4,13 @@ import datetime
 import ast
 import argparse
 from datetime import date
-from dbManager import get_entries_date_range, get_entries_from_date
-from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
+#from dbManager import get_entries_date_range, get_entries_from_date
+#from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
+
+import dbManager
+import eeManager
 # USED TO DEMO DECRYPTION
-from eeManager import Decryptor, load_private_key, decode_base64_key_and_data
+#from eeManager import Decryptor, load_private_key, decode_base64_key_and_data
 
 a = '2021-3-25' # REMOVE BEFORE IMPLEMENTING
 b = '2021-3-26' # REMOVE BEFORE IMPLEMENTING
@@ -58,7 +61,7 @@ def execute(_start_time, _stop_time, public_key=None):
     # CHECK IF START DATE IS BEFORE STOP DATE
     if date_compare(start_time, stop_time) <= 0:
         print('stop time was used',stop_time)
-        data = get_entries_from_date(stop_time)
+        data = dbManager.get_entries_from_date(stop_time)
 
     else:
         alpha = time.strptime(start_time, "%Y-%m-%d")
@@ -71,21 +74,21 @@ def execute(_start_time, _stop_time, public_key=None):
         if delta.days > max_day_range:
             new_start_time = l_date - datetime.timedelta(max_day_range)
             print('delta.days > max_day_range:', new_start_time, stop_time)
-            data = get_entries_date_range(new_start_time, stop_time)
+            data = dbManager.get_entries_date_range(new_start_time, stop_time)
         
         else:
             print('last alt', start_time, stop_time)
-            data = get_entries_date_range(start_time, stop_time)
+            data = dbManager.get_entries_date_range(start_time, stop_time)
 
     # ENCRYPTION & ENCODING
     if public_key is not None:
         bytes_data = bytes(str(data), 'utf-8')
-        encryptor = Encryptor(bytes_data, public_key)
-        data = encode_base64_key_and_data(*encryptor.return_key_and_data())
+        encryptor = eeManager.Encryptor(bytes_data, public_key)
+        data = eeManager.encode_base64_key_and_data(*encryptor.return_key_and_data())
 
     # ENCODING
     else:
-        data = encode_base64(data)
+        data = eeManager.encode_base64(data)
 
     return data
 
@@ -99,8 +102,8 @@ if __name__ == "__main__":
     runtime = execute(args.start, args.stop, the_key)
     print(runtime)
 
-    sym_key, data = decode_base64_key_and_data(runtime)
-    decryptor = Decryptor(data, sym_key, the_secret)
+    sym_key, data = eeManager.decode_base64_key_and_data(runtime)
+    decryptor = eeManager.Decryptor(data, sym_key, the_secret)
     x, y = decryptor.return_key_and_data()
     res = ast.literal_eval(y.decode('utf-8'))
     print(res)
