@@ -340,34 +340,30 @@ modification_event = oracle.event('modification')
 # In[6]:
 
 
-try:
-    print('AWAITING EVENTS...\n')
-    
-    # DYNAMICALLY IMPORT THE ORACLE SOFTWARE
-    oracle_software = import_file('oracle/main.py')
-    func = oracle_software.perform_task
+print('AWAITING EVENTS...\n')
 
-    while(True):
+# DYNAMICALLY IMPORT THE ORACLE SOFTWARE
+oracle_software = import_file('oracle/main.py')
+func = oracle_software.perform_task
 
-        # VARIABLE MODIFICATION EVENT
-        for event in modification_event.get_new_entries():
-            update_details()
+while(True):
 
-        # UPDATE MIDDLEWARE EVENT
-        for event in update_event.get_new_entries():
-            update_middleware()
+    # VARIABLE MODIFICATION EVENT
+    for event in modification_event.get_new_entries():
+        update_details()
 
-        # IF THE DEVICE IS SET TO ACTIVE
-        if (active):
+    # UPDATE MIDDLEWARE EVENT
+    for event in update_event.get_new_entries():
+        update_middleware()
 
-            # PERFORM TASKS IN BACKLOG
-            for task in backlog:
-                perform_task(task, func)
+    # IF THE DEVICE IS SET TO ACTIVE
+    if (active):
 
+        # PERFORM TASKS IN BACKLOG
+        for task in backlog:
+            perform_task(task, func)
 
 
-except:
-    print('\nTHE PROCESS WAS MANUALLY KILLED')             
 
 
 # In[ ]:
