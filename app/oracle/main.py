@@ -9,8 +9,9 @@ import oracle.serviceManager as sm
 
 def perform_task(task, params):
     print('\tORACLE TRIGGERED')
-    data = sm.execute(params)
-    return data
+    print(params)
+    #data = sm.execute(params)
+    return 'foo'
 
 
 # In[ ]:
