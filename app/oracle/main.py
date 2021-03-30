@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+
+#!/home/matti/IoT-Microservice/venv/bin/python3.8
 # coding: utf-8
 
 from serviceManager import execute

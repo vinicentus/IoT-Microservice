@@ -1,7 +1,7 @@
 # ETHEREUM GATEWAY
 gateway:
-    host: 127.0.0.1
-    port: 8545
+    host: 193.167.32.156
+    port: 8080
 
 # ETHEREUM KEYS
 keys:
