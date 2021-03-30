@@ -12,7 +12,7 @@ def perform_task(task, params):
     print(params)
     data = sm.execute(**params)
     print(type(data))
-    return data
+    return data[:10]
 
 
 # In[ ]:
