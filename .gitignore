@@ -142,3 +142,5 @@ secret.key
 
 # database
 sensor_data.db
+
+measurement_samples.csv
