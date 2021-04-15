@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import pandas as pd
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -80,5 +81,6 @@ if __name__ == "__main__":
     the_records = get_all_entries()
     for row in the_records:
         print(row)
+    #pd.DataFrame(the_records).to_csv('big_data_sample.csv', index=False)
     exit()
 
