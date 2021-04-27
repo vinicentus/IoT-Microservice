@@ -1,6 +1,4 @@
 # coding: utf-8
-# todo: fix licence
-# TODO: http://python.org/dev/peps/pep-0263/
 """
     A python library for control of the Sensirion SPS30 Particulate Matter Sensor.
 
