@@ -3,6 +3,6 @@
 #/home/ubuntu/scripts/venv/bin/python3
 # add to sudo crontab -e
 
-*/5 * * * * cd /home/pi/IoT-Microservice/app/ && ./sps30_collect_data.py
-3 18 * * 6 cd /home/pi/IoT-Microservice/app/ && ./sps30_sensor_clean.py
+*/5 * * * * cd /home/pi/IoT-Microservice/app/oracle/ && ./sps30_collect_data.py
+3 18 * * 6 cd /home/pi/IoT-Microservice/app/oracle/ && ./sps30_sensor_clean.py
 # blank line needed att end of file to function properly
