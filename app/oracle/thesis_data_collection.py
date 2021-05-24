@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3.8
+#!/home/pi/IoT-Microservice/venv/bin/python3
 # CHANGE PYTHON PATH TO MATCH YOUR LOCAL INSTALLATION
 import time
 import numpy as np
