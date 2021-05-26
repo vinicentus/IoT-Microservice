@@ -24,14 +24,13 @@ try:
     sensor_sps30.close_port()
 
     # ERROR HANDLING
-    if (result.length != 12):
+    if (len(result) == 10):
+        # ADD DATA SAVING
+        add_entry(date, timestamp, result[0], result[1], result[2], result[3], result[4],
+                  result[5], result[6], result[7], result[8], result[9])
+    else:
         # Print the error message
         print(result[0])
         # TODO: log errors to separate table in database?
-        exit()
-
-    # ADD DATA SAVING
-    add_entry(date, timestamp, result[0], result[1], result[2], result[3], result[4],
-              result[5], result[6], result[7], result[8], result[9])
 except NotImplemented:
     exit()

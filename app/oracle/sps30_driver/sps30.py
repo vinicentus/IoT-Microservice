@@ -122,17 +122,19 @@ class Sps30:
     def read_data(self, _stop_value):
         """
         Method for reading MISO data.
+        This attempts to read in the specified number of bytes,
+        but will stop reading if it receives a stop byte,
+        at which point it will return the packet as is.
 
         :param int _stop_value: the expected number of bytes to read.
         :return bytearray data:
         """
-        data_to_read = self.ser.inWaiting()
 
-        while data_to_read < _stop_value:
-            data_to_read = self.ser.inWaiting()
-            time.sleep(0.1)
-
-        data = self.ser.read(data_to_read)
+        # We read the first byte separately,
+        # as not to interpret it as a stop byte (the same value)
+        # 0x7E is '~' in ASCII, the expected String format
+        data = self.ser.read(size=1)
+        data += self.ser.read_until(expected="~", size=(_stop_value -1))
 
         return data
 
@@ -233,6 +235,13 @@ class Sps30:
 
         # Segmenting the MISO Frame.
         start, adr, cmd, state, length, rx_data, chk, stop = self.segment_miso_frame(unstuffed_raw_data)
+
+        # Check that we have new data.
+        # The returned frame will be empty if there isn't any data
+        # Example of empty frame: 0x7E 0x00 0x03 0x00 0x00 0xFC 0x7E
+        if length == 0:
+            data = ['Received empty package, meaning there was no new data', rx_data, ValueError]
+            return data
 
         # Checking mode to unpack data correctly
         if mode == 'integer':
