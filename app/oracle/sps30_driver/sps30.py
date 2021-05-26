@@ -324,6 +324,10 @@ class Sps30:
         unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
 
         data = self.segment_miso_frame(unstuffed_raw_data)  # Segmenting the MISO Frame.
+        
+        # The sensor cleaning takes about 10 seconds,
+        # blocking for 11 before returning just to be safe.
+        time.sleep(11)
 
         return data
 

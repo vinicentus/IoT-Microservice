@@ -12,7 +12,7 @@ try:
     sensor_sps30.start_measurement(start_up_time=startup_time)
     # EXECUTES FAN CLEANING COMMAND
     sfc = sensor_sps30.start_fan_cleaning()
-    time.sleep(11)
+    time.sleep(1)
     sensor_sps30.stop_measurement()
     sensor_sps30.close_port()
 
