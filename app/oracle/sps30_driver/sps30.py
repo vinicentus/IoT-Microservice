@@ -125,16 +125,23 @@ class Sps30:
         This attempts to read in the specified number of bytes,
         but will stop reading if it receives a stop byte,
         at which point it will return the packet as is.
+        It will also time out as specified in the init method,
+        if there is not enough data.
 
         :param int _stop_value: the expected number of bytes to read.
         :return bytearray data:
         """
 
         # We read the first byte separately,
-        # as not to interpret it as a stop byte (the same value)
-        # 0x7E is '~' in ASCII, the expected String format
+        # (supposedly the start byte),
+        # as not to interpret it as a stop byte (the same value).
+        # 0x7E (the start and stop byte value) is '~' in ASCII
+
+        # This is bettr than the previous implementation in that it
+        # doesn't block excecution if there is no data avialable.
+        # Instead, it times out after the specified delay.
         data = self.ser.read(size=1)
-        data += self.ser.read_until(expected="~", size=(_stop_value -1))
+        data += self.ser.read_until(expected="~")
 
         return data
 
