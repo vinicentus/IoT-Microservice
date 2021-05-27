@@ -1,0 +1,4 @@
+# CUSTOM:
+# This starts the measurement modes for all sensors
+cd /home/pi/IoT-Microservice/app/oracle/ && ./sps30_start_measurement.py
+cd /home/pi/IoT-Microservice/app/oracle/ && ./scd30_setup.py
