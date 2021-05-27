@@ -45,6 +45,7 @@ class Sps30:
     """
     Base class for Sensirion Sps30 Particulate Matter Sensor.
     """
+
     def __init__(self, port):
         """
         Constructor method for Sps30 class.
@@ -186,11 +187,14 @@ class Sps30:
 
         raw_data = self.read_data(stop_value)  # MISO
 
-        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
+        # Undo byte-stuffing in raw_data.
+        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)
 
-        data = self.segment_miso_frame(unstuffed_raw_data)  # Segmenting the MISO Frame.
+        # Segmenting the MISO Frame.
+        data = self.segment_miso_frame(unstuffed_raw_data)
 
-        time.sleep(start_up_time)  # Minimum time needed to boot up the sensor. Range: 8 - 30 seconds.
+        # Minimum time needed to boot up the sensor. Range: 8 - 30 seconds.
+        time.sleep(start_up_time)
 
         return data
 
@@ -209,9 +213,11 @@ class Sps30:
 
         raw_data = self.read_data(stop_value)  # MISO
 
-        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
+        # Undo byte-stuffing in raw_data.
+        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)
 
-        data = self.segment_miso_frame(unstuffed_raw_data)  # Segmenting the MISO Frame.
+        # Segmenting the MISO Frame.
+        data = self.segment_miso_frame(unstuffed_raw_data)
 
         return data
 
@@ -233,33 +239,39 @@ class Sps30:
         else:
             stop_value = 47
 
-        self.ser.reset_input_buffer()  # Clear input buffer to ensure no leftover data in stream.
+        # Clear input buffer to ensure no leftover data in stream.
+        self.ser.reset_input_buffer()
         self.ser.write([0x7E, 0x00, 0x03, 0x00, 0xFC, 0x7E])  # MOSI
 
         raw_data = self.read_data(stop_value)  # MISO
 
-        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
+        # Undo byte-stuffing in raw_data.
+        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)
 
         # Segmenting the MISO Frame.
-        start, adr, cmd, state, length, rx_data, chk, stop = self.segment_miso_frame(unstuffed_raw_data)
+        start, adr, cmd, state, length, rx_data, chk, stop = self.segment_miso_frame(
+            unstuffed_raw_data)
 
         # Check that we have new data.
         # The returned frame will be empty if there isn't any data
         # Example of empty frame: 0x7E 0x00 0x03 0x00 0x00 0xFC 0x7E
         if length == 0:
-            data = ['Received empty package, meaning there was no new data', rx_data, ValueError]
+            data = [
+                'Received empty package, meaning there was no new data', rx_data, ValueError]
             return data
 
         # Checking mode to unpack data correctly
         if mode == 'integer':
             try:
-                data = struct.unpack(">HHHHHHHHHH", rx_data)  # format = big-endian 10 integers
+                # format = big-endian 10 integers
+                data = struct.unpack(">HHHHHHHHHH", rx_data)
 
             except struct.error as e:
                 data = ['Error in unpacking rx_data', rx_data, e]
         else:
             try:
-                unpacked_data = struct.unpack(">ffffffffff", rx_data)  # format = big-endian 10 floats
+                # format = big-endian 10 floats
+                unpacked_data = struct.unpack(">ffffffffff", rx_data)
                 data = [round(num, 2) for num in unpacked_data]
             except struct.error as e:
                 data = ['Error in unpacking rx_data', rx_data, e]
@@ -283,9 +295,11 @@ class Sps30:
 
         raw_data = self.read_data(stop_value)  # MISO
 
-        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
+        # Undo byte-stuffing in raw_data.
+        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)
 
-        data = self.segment_miso_frame(unstuffed_raw_data)  # Segmenting the MISO Frame.
+        # Segmenting the MISO Frame.
+        data = self.segment_miso_frame(unstuffed_raw_data)
 
         return data
 
@@ -306,9 +320,11 @@ class Sps30:
 
         raw_data = self.read_data(stop_value)  # MISO
 
-        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
+        # Undo byte-stuffing in raw_data.
+        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)
 
-        data = self.segment_miso_frame(unstuffed_raw_data)  # Segmenting the MISO Frame.
+        # Segmenting the MISO Frame.
+        data = self.segment_miso_frame(unstuffed_raw_data)
 
         return data
 
@@ -328,10 +344,12 @@ class Sps30:
 
         raw_data = self.read_data(stop_value)  # MISO
 
-        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
+        # Undo byte-stuffing in raw_data.
+        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)
 
-        data = self.segment_miso_frame(unstuffed_raw_data)  # Segmenting the MISO Frame.
-        
+        # Segmenting the MISO Frame.
+        data = self.segment_miso_frame(unstuffed_raw_data)
+
         # The sensor cleaning takes about 10 seconds,
         # blocking for 11 before returning just to be safe.
         time.sleep(11)
@@ -381,10 +399,12 @@ class Sps30:
 
         raw_data = self.ser.read(stop_value)  # MISO
 
-        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
+        # Undo byte-stuffing in raw_data.
+        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)
 
         # Segmenting the MISO Frame.
-        start, adr, cmd, state, length, rx_data, chk, stop = self.segment_miso_frame(unstuffed_raw_data)
+        start, adr, cmd, state, length, rx_data, chk, stop = self.segment_miso_frame(
+            unstuffed_raw_data)
 
         data = rx_data.decode('ascii')
 
@@ -406,13 +426,16 @@ class Sps30:
 
         raw_data = self.read_data(stop_value)  # MISO
 
-        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
+        # Undo byte-stuffing in raw_data.
+        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)
 
         # Segmenting the MISO Frame.
-        start, adr, cmd, state, length, rx_data, chk, stop = self.segment_miso_frame(unstuffed_raw_data)
+        start, adr, cmd, state, length, rx_data, chk, stop = self.segment_miso_frame(
+            unstuffed_raw_data)
 
         try:
-            data = struct.unpack(">BBBBBBB", rx_data)  # format = big-endian 7  uint8 integers
+            # format = big-endian 7  uint8 integers
+            data = struct.unpack(">BBBBBBB", rx_data)
         except struct.error as e:
             data = e
 
@@ -434,9 +457,11 @@ class Sps30:
 
         raw_data = self.read_data(stop_value)  # MISO
 
-        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
+        # Undo byte-stuffing in raw_data.
+        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)
 
-        data = self.segment_miso_frame(unstuffed_raw_data)  # Segmenting the MISO Frame.
+        # Segmenting the MISO Frame.
+        data = self.segment_miso_frame(unstuffed_raw_data)
 
         return data
 
@@ -455,9 +480,11 @@ class Sps30:
 
         raw_data = self.read_data(stop_value)  # MISO
 
-        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)  # Undo byte-stuffing in raw_data.
+        # Undo byte-stuffing in raw_data.
+        unstuffed_raw_data = self.undo_byte_stuffing(raw_data)
 
-        data = self.segment_miso_frame(unstuffed_raw_data)  # Segmenting the MISO Frame.
+        # Segmenting the MISO Frame.
+        data = self.segment_miso_frame(unstuffed_raw_data)
 
         return data
 

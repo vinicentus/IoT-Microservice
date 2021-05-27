@@ -33,7 +33,8 @@ def add_entry(event_date, event_time, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
                           ('date', 'time', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10') 
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
 
-    data_tuple = (event_date, event_time, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10)
+    data_tuple = (event_date, event_time, d1, d2,
+                  d3, d4, d5, d6, d7, d8, d9, d10)
     cursor.execute(sqlite_insert_with_param, data_tuple)
     sqliteConnection.commit()
     cursor.close()
@@ -83,4 +84,3 @@ if __name__ == "__main__":
         print(row)
     #pd.DataFrame(the_records).to_csv('big_data_sample.csv', index=False)
     exit()
-
