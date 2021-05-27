@@ -8,7 +8,7 @@ from sps30_driver import sps30
 
 device_port = "/dev/ttyUSB0"
 startup_time = 8
-samples_per_measurement = 30
+samples_per_measurement = 5
 results = []
 dates = []
 timestamps = []
@@ -43,6 +43,3 @@ try:
               aggr_data[5], aggr_data[6], aggr_data[7], aggr_data[8], aggr_data[9])
 except NotImplemented:
     exit()
-
-
-
