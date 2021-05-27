@@ -1,0 +1,3 @@
+[submodule "rpi-i2c-timings"]
+	path = rpi-i2c-timings
+	url = https://github.com/RequestForCoffee/rpi-i2c-timings
