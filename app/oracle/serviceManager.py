@@ -74,10 +74,12 @@ def execute(_start_time, _stop_time, public_key=None):
         if delta.days > max_day_range:
             new_start_time = l_date - datetime.timedelta(max_day_range)
             print('delta.days > max_day_range:', new_start_time, stop_time)
+            # TODO: check that this works with the new dattime column in the db
             data = dbManager.get_entries_date_range(new_start_time, stop_time)
         
         else:
             print('last alt', start_time, stop_time)
+            # TODO: check that this works with the new dattime column in the db
             data = dbManager.get_entries_date_range(start_time, stop_time)
 
     # ENCRYPTION & ENCODING

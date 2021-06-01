@@ -1,6 +1,7 @@
 #!/home/pi/IoT-Microservice/venv/bin/python3
 # CHANGE PYTHON PATH TO MATCH YOUR LOCAL INSTALLATION
 import time
+import datetime
 import numpy as np
 from dbManager import *
 from sps30_driver import sps30
@@ -10,7 +11,6 @@ device_port = "/dev/ttyUSB0"
 startup_time = 8
 samples_per_measurement = 5
 results = []
-dates = []
 timestamps = []
 
 
@@ -23,8 +23,8 @@ try:
 
     # PERFORMING MEASUREMENTS
     for i in range(samples_per_measurement):
-        dates.append(time.strftime('%Y-%m-%d'))
-        timestamps.append(time.strftime('%H:%M:%S'))
+        timestamps.append(datetime.datetime.utcnow(
+        ).isoformat(timespec='seconds') + 'Z')
         results.append(sensor_sps30.read_measured_values())
         time.sleep(1)
 
@@ -39,7 +39,7 @@ try:
     aggr_data = np_data.mean(axis=0)
 
     # ADD DATA SAVING
-    add_entry(dates[-1], timestamps[-1], aggr_data[0], aggr_data[1], aggr_data[2], aggr_data[3], aggr_data[4],
+    add_entry(timestamps[-1], aggr_data[0], aggr_data[1], aggr_data[2], aggr_data[3], aggr_data[4],
               aggr_data[5], aggr_data[6], aggr_data[7], aggr_data[8], aggr_data[9])
 except NotImplemented:
     exit()

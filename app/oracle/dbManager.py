@@ -7,14 +7,13 @@ path = os.path.dirname(os.path.abspath(__file__))
 db = os.path.join(path, 'sensor_data.db')
 
 
-def add_entry_scd30(event_date, event_time, d1, d2, d3):
+def add_entry_scd30(event_datetime, d1, d2, d3):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
     print("Connected to SQLite")
 
     sqlite_create_table_query = '''CREATE TABLE IF NOT EXISTS scd30_output (
-                                       date timestamp,
-                                       time timestamp,
+                                       datetime timestamp,
                                        d1 REAL,
                                        d2 REAL,
                                        d3 REAL);'''
@@ -23,23 +22,22 @@ def add_entry_scd30(event_date, event_time, d1, d2, d3):
     cursor.execute(sqlite_create_table_query)
 
     sqlite_insert_with_param = """INSERT INTO 'scd30_output'
-                          ('date', 'time', 'd1', 'd2', 'd3') 
-                          VALUES (?, ?, ?, ?, ?);"""
+                          ('datetime', 'd1', 'd2', 'd3') 
+                          VALUES (?, ?, ?, ?);"""
 
-    data_tuple = (event_date, event_time, d1, d2, d3)
+    data_tuple = (event_datetime, d1, d2, d3)
     cursor.execute(sqlite_insert_with_param, data_tuple)
     sqliteConnection.commit()
     cursor.close()
 
 
-def add_entry(event_date, event_time, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
+def add_entry(event_datetime, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
     print("Connected to SQLite")
 
     sqlite_create_table_query = '''CREATE TABLE IF NOT EXISTS sensor_output (
-                                       date timestamp,
-                                       time timestamp,
+                                       datetime timestamp,
                                        d1 REAL,
                                        d2 REAL,
                                        d3 REAL,
@@ -55,10 +53,10 @@ def add_entry(event_date, event_time, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
     cursor.execute(sqlite_create_table_query)
 
     sqlite_insert_with_param = """INSERT INTO 'sensor_output'
-                          ('date', 'time', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10') 
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
+                          ('datetime', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10') 
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
 
-    data_tuple = (event_date, event_time, d1, d2,
+    data_tuple = (event_datetime, d1, d2,
                   d3, d4, d5, d6, d7, d8, d9, d10)
     cursor.execute(sqlite_insert_with_param, data_tuple)
     sqliteConnection.commit()
@@ -77,11 +75,11 @@ def get_all_entries():
     return records
 
 
-def get_entries_from_date(date):
+def get_entries_from_date(datetime):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = "SELECT * FROM sensor_output WHERE date= ?"
-    cursor.execute(sqlite_select_query, (date,))
+    sqlite_select_query = "SELECT * FROM sensor_output WHERE datetime= ?"
+    cursor.execute(sqlite_select_query, (datetime,))
     records = cursor.fetchall()
 
     sqliteConnection.commit()
@@ -90,10 +88,10 @@ def get_entries_from_date(date):
     return records
 
 
-def get_entries_date_range(start, stop):
+def get_entries_datetime_range(start, stop):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = "SELECT * FROM sensor_output WHERE date >= ? AND date <= ?"
+    sqlite_select_query = "SELECT * FROM sensor_output WHERE datetime >= ? AND datetime <= ?"
     cursor.execute(sqlite_select_query, (start, stop,))
     records = cursor.fetchall()
 
