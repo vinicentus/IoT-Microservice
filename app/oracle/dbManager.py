@@ -36,7 +36,7 @@ def add_entry(event_datetime, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
     cursor = sqliteConnection.cursor()
     print("Connected to SQLite")
 
-    sqlite_create_table_query = '''CREATE TABLE IF NOT EXISTS sensor_output (
+    sqlite_create_table_query = '''CREATE TABLE IF NOT EXISTS sps30_output (
                                        datetime timestamp,
                                        d1 REAL,
                                        d2 REAL,
@@ -52,7 +52,7 @@ def add_entry(event_datetime, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
     cursor = sqliteConnection.cursor()
     cursor.execute(sqlite_create_table_query)
 
-    sqlite_insert_with_param = """INSERT INTO 'sensor_output'
+    sqlite_insert_with_param = """INSERT INTO 'sps30_output'
                           ('datetime', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10') 
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
 
@@ -66,7 +66,7 @@ def add_entry(event_datetime, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
 def get_all_entries():
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = """SELECT * FROM sensor_output"""
+    sqlite_select_query = """SELECT * FROM sps30_output"""
     cursor.execute(sqlite_select_query)
     records = cursor.fetchall()
 
@@ -78,7 +78,7 @@ def get_all_entries():
 def get_entries_from_date(datetime):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = "SELECT * FROM sensor_output WHERE datetime= ?"
+    sqlite_select_query = "SELECT * FROM sps30_output WHERE datetime= ?"
     cursor.execute(sqlite_select_query, (datetime,))
     records = cursor.fetchall()
 
@@ -91,7 +91,7 @@ def get_entries_from_date(datetime):
 def get_entries_datetime_range(start, stop):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = "SELECT * FROM sensor_output WHERE datetime >= ? AND datetime <= ?"
+    sqlite_select_query = "SELECT * FROM sps30_output WHERE datetime >= ? AND datetime <= ?"
     cursor.execute(sqlite_select_query, (start, stop,))
     records = cursor.fetchall()
 
