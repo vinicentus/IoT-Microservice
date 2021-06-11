@@ -65,6 +65,7 @@ def sendCommand(address: int, command: list, expectedReturnbytes: int, data: lis
 # Connect to the device with default settings:
 #  - baudrate:      460800
 #  - slave address: 0
+# https://sensirion.github.io/python-shdlc-sensorbridge/api.html#sensorbridgeshdlcdevice
 with ShdlcSerialPort(port='/dev/ttyUSB1', baudrate=460800) as port:
     device = SensorBridgeShdlcDevice(ShdlcConnection(port), slave_address=0)
 
