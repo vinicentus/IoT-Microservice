@@ -2,9 +2,11 @@
 # CHANGE PYTHON PATH TO MATCH YOUR LOCAL INSTALLATION
 
 import time
+import datetime
 from sensirion_shdlc_driver import ShdlcSerialPort, ShdlcConnection
 from sensirion_shdlc_sensorbridge import SensorBridgePort, SensorBridgeShdlcDevice
 from crccheck.crc import Crc8Nrsc5
+from dbManager import *
 
 # data = bytearray.fromhex("BEEF")
 # crc = Crc8Nrsc5.calc(data)
@@ -51,8 +53,9 @@ def sendCommand(address: int, command: list, expectedReturnbytes: int, data: lis
         dataOnly = bytes(packet)[:2]
         checkSum = bytes(packet)[2:]
         if (compareChecksum(bytearray(dataOnly), int.from_bytes(checkSum, byteorder="big")) != 0):
-            # TODO: throw or return null
-            print("checksum error")
+            print("checksum error, data was '{}', checksum was '{}'".format(
+                dataOnly, checkSum))
+            return None
         else:
             packetsOnly.append(dataOnly)
 
@@ -76,19 +79,32 @@ with ShdlcSerialPort(port='/dev/ttyUSB1', baudrate=460800) as port:
     device.set_supply_voltage(SensorBridgePort.ONE, voltage=5.0)
     device.switch_supply_on(SensorBridgePort.ONE)
 
+    # Perform a soft reset of all sensirion devices on the bus
+    # sendCommand(address=0x58, command=[0x00, 0x06],
+    #             expectedReturnbytes=0)
+    # time.sleep(1)
+
     # Prepare the sensor to start reading data with a "sgp30_iaq_init" command
     sendCommand(address=0x58, command=[0x20, 0x03],
                 expectedReturnbytes=0)
 
-    for i in range(30):
+    print("\"warming up\" sensor...")
+    for i in range(15):
         time.sleep(1)
         rx = sendCommand(address=0x58, command=[0x20, 0x08],
                          expectedReturnbytes=6)
+
+    while True:
+        time.sleep(1)
+        rx = sendCommand(address=0x58, command=[0x20, 0x08],
+                         expectedReturnbytes=6)
+
         print("Received data '{}' of length '{}'".format(
             list(map(lambda x: x.hex(), rx)), len(rx)))
-        print("CO2: {}ppm, TVOC: {}ppb".format(
-            int.from_bytes(rx[0], "big"), int.from_bytes(rx[1], "big")))
+        co2, tvoc = int.from_bytes(rx[0], "big"), int.from_bytes(rx[1], "big")
+        print("CO2: {}ppm, TVOC: {}ppb".format(co2, tvoc))
 
-    # Perform a soft reset of all sensirion devices on the bus
-    sendCommand(address=0x58, command=[0x00, 0x06],
-                expectedReturnbytes=0)
+        timestamp = datetime.datetime.utcnow().isoformat(timespec='seconds') + 'Z'
+
+        if rx is not None:
+            add_entry_svm30(timestamp, co2, tvoc)

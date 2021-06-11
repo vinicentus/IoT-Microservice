@@ -7,6 +7,29 @@ path = os.path.dirname(os.path.abspath(__file__))
 db = os.path.join(path, 'sensor_data.db')
 
 
+def add_entry_svm30(event_datetime, co2, tvoc):
+    sqliteConnection = sqlite3.connect(db)
+    cursor = sqliteConnection.cursor()
+    print("Connected to SQLite")
+
+    sqlite_create_table_query = '''CREATE TABLE IF NOT EXISTS svm30_output (
+                                       datetime timestamp,
+                                       co2 REAL,
+                                       tvoc REAL);'''
+
+    cursor = sqliteConnection.cursor()
+    cursor.execute(sqlite_create_table_query)
+
+    sqlite_insert_with_param = """INSERT INTO 'svm30_output'
+                          ('datetime', 'co2', 'tvoc') 
+                          VALUES (?, ?, ?);"""
+
+    data_tuple = (event_datetime, co2, tvoc)
+    cursor.execute(sqlite_insert_with_param, data_tuple)
+    sqliteConnection.commit()
+    cursor.close()
+
+
 def add_entry_scd30(event_datetime, d1, d2, d3):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
