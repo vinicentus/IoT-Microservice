@@ -10,11 +10,51 @@ data = bytearray.fromhex("BEEF")
 crc = Crc8Nrsc5.calc(data)
 print(crc)
 
+
 def calculateChecksum(data: list):
     assert len(data) == 2
     crc = Crc8Nrsc5.calc(data)
     data.append(crc)
-    return data
+    return crc
+
+
+def compareChecksum(data: list, checksum: int):
+    if (calculateChecksum(data) != checksum):
+        return -1
+    return 0
+
+
+def separatePackets(data: list):
+    # 16bit data packets with 8bit checksum
+    rawDataPackets = []
+    tempdata = bytearray()
+    for i in range(len(data)):
+        tempdata.append(data[i])
+        if ((i + 1) % 3 == 0):
+            rawDataPackets.append(bytes(tempdata))
+            tempdata = bytearray()
+    return rawDataPackets
+
+
+def sendCommand(address: int, command: list, expectedReturnbytes: int,  device: SensorBridgeShdlcDevice, data: list = []):
+    txData = command + data
+
+    rx_data = device.transceive_i2c(
+        SensorBridgePort.ONE, address=address, tx_data=txData,
+        rx_length=expectedReturnbytes, timeout_us=100e3)
+
+    rawDataPackets = separatePackets(rx_data)
+
+    for packet in rawDataPackets:
+        dataOnly = bytes(packet)[:2]
+        checkSum = bytes(packet)[2:]
+        if (compareChecksum(bytearray(dataOnly), int.from_bytes(checkSum, byteorder="big")) != 0):
+            print("checksum error")
+
+    print("Received data '{}' of length '{}'".format(
+        bytes(rx_data).hex(), len(rx_data)))
+
+    return rawDataPackets
 
 
 # Connect to the device with default settings:
@@ -24,6 +64,7 @@ with ShdlcSerialPort(port='/dev/ttyUSB1', baudrate=460800) as port:
     device = SensorBridgeShdlcDevice(ShdlcConnection(port), slave_address=0)
 
     # Print some device information
+    # This is information about the sensor bridge!
     print("Version: {}".format(device.get_version()))
     print("Product Name: {}".format(device.get_product_name()))
     print("Serial Number: {}".format(device.get_serial_number()))
@@ -33,40 +74,28 @@ with ShdlcSerialPort(port='/dev/ttyUSB1', baudrate=460800) as port:
     device.set_supply_voltage(SensorBridgePort.ONE, voltage=5.0)
     device.switch_supply_on(SensorBridgePort.ONE)
 
-    # Perform synchronous I2C transceive on port 1
-    rx_data = device.transceive_i2c(
-        SensorBridgePort.ONE, address=0x58, tx_data=[0x20, 0x15],
-        rx_length=6, timeout_us=100e3)
-    print("Received data: {}".format(rx_data))
-
-    # Perform synchronous I2C transceive on port 1
+    # Prepare the sensor to start reading data with a "sgp30_iaq_init" command
     rx_data = device.transceive_i2c(
         SensorBridgePort.ONE, address=0x58, tx_data=[0x20, 0x03],
         rx_length=0, timeout_us=100e3)
-    print("Received data: {}".format(rx_data))
+
+    # for i in range(30):
+    #     time.sleep(1)
+    #     # Read the data using "sgp30_measure_iaq" command
+    #     # Note that the first 15 measurements do not contain any valid data
+    #     # TODO: fitler out the first 15 measurements
+    #     rx_data = device.transceive_i2c(
+    #         SensorBridgePort.ONE, address=0x58, tx_data=[0x20, 0x08],
+    #         rx_length=6, timeout_us=100e3)
+    #     print("Received data '{}' of length '{}'".format(
+    #         bytes(rx_data).hex(), len(rx_data)))
 
     for i in range(30):
         time.sleep(1)
-        # Perform synchronous I2C transceive on port 1
-        rx_data = device.transceive_i2c(
-            SensorBridgePort.ONE, address=0x58, tx_data=[0x20, 0x08],
-            rx_length=6, timeout_us=100e3)
-        print("Received data: {}".format(rx_data))
+        sendCommand(address=0x58, command=[0x20, 0x08],
+                    expectedReturnbytes=6, device=device)
 
-    # Perform synchronous I2C transceive on port 1
+    # Perform a soft reset of all sensirion devices on the bus
     rx_data = device.transceive_i2c(
         SensorBridgePort.ONE, address=0x58, tx_data=[0x00, 0x06],
         rx_length=0, timeout_us=100e3)
-    print("Received data: {}".format(rx_data))
-
-    # Perform asynchronous I2C transceive on port 1
-    # handle = device.start_repeated_i2c_transceive(
-    #     SensorBridgePort.ONE, interval_us=100e3, address=0x58,
-    #     tx_data=[0x20, 0x08], rx_length=6, timeout_us=1000e3, read_delay_us=10e3)
-    # time.sleep(1.0)  # let the device perform the repeated transceives
-    # buffer = device.read_buffer(handle)
-    # device.stop_repeated_i2c_transceive(handle)
-    # print("Lost bytes: {}".format(buffer.lost_bytes))
-    # print("Remaining bytes: {}".format(buffer.remaining_bytes))
-    # print("Buffered values: {}".format(
-    #     [value.data for value in buffer.values]))
