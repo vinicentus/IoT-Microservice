@@ -6,9 +6,9 @@ from sensirion_shdlc_driver import ShdlcSerialPort, ShdlcConnection
 from sensirion_shdlc_sensorbridge import SensorBridgePort, SensorBridgeShdlcDevice
 from crccheck.crc import Crc8Nrsc5
 
-data = bytearray.fromhex("BEEF")
-crc = Crc8Nrsc5.calc(data)
-print(crc)
+# data = bytearray.fromhex("BEEF")
+# crc = Crc8Nrsc5.calc(data)
+# print(crc)
 
 
 def calculateChecksum(data: list):
@@ -36,7 +36,7 @@ def separatePackets(data: list):
     return rawDataPackets
 
 
-def sendCommand(address: int, command: list, expectedReturnbytes: int,  device: SensorBridgeShdlcDevice, data: list = []):
+def sendCommand(address: int, command: list, expectedReturnbytes: int, data: list = []):
     txData = command + data
 
     rx_data = device.transceive_i2c(
@@ -45,16 +45,18 @@ def sendCommand(address: int, command: list, expectedReturnbytes: int,  device: 
 
     rawDataPackets = separatePackets(rx_data)
 
+    packetsOnly = []
+
     for packet in rawDataPackets:
         dataOnly = bytes(packet)[:2]
         checkSum = bytes(packet)[2:]
         if (compareChecksum(bytearray(dataOnly), int.from_bytes(checkSum, byteorder="big")) != 0):
+            # TODO: throw or return null
             print("checksum error")
+        else:
+            packetsOnly.append(dataOnly)
 
-    print("Received data '{}' of length '{}'".format(
-        bytes(rx_data).hex(), len(rx_data)))
-
-    return rawDataPackets
+    return packetsOnly
 
 
 # Connect to the device with default settings:
@@ -75,27 +77,16 @@ with ShdlcSerialPort(port='/dev/ttyUSB1', baudrate=460800) as port:
     device.switch_supply_on(SensorBridgePort.ONE)
 
     # Prepare the sensor to start reading data with a "sgp30_iaq_init" command
-    rx_data = device.transceive_i2c(
-        SensorBridgePort.ONE, address=0x58, tx_data=[0x20, 0x03],
-        rx_length=0, timeout_us=100e3)
-
-    # for i in range(30):
-    #     time.sleep(1)
-    #     # Read the data using "sgp30_measure_iaq" command
-    #     # Note that the first 15 measurements do not contain any valid data
-    #     # TODO: fitler out the first 15 measurements
-    #     rx_data = device.transceive_i2c(
-    #         SensorBridgePort.ONE, address=0x58, tx_data=[0x20, 0x08],
-    #         rx_length=6, timeout_us=100e3)
-    #     print("Received data '{}' of length '{}'".format(
-    #         bytes(rx_data).hex(), len(rx_data)))
+    sendCommand(address=0x58, command=[0x20, 0x03],
+                expectedReturnbytes=0)
 
     for i in range(30):
         time.sleep(1)
-        sendCommand(address=0x58, command=[0x20, 0x08],
-                    expectedReturnbytes=6, device=device)
+        rx = sendCommand(address=0x58, command=[0x20, 0x08],
+                         expectedReturnbytes=6)
+        print("Received data '{}' of length '{}'".format(
+            list(map(lambda x: x.hex(), rx)), len(rx)))
 
     # Perform a soft reset of all sensirion devices on the bus
-    rx_data = device.transceive_i2c(
-        SensorBridgePort.ONE, address=0x58, tx_data=[0x00, 0x06],
-        rx_length=0, timeout_us=100e3)
+    sendCommand(address=0x58, command=[0x00, 0x06],
+                expectedReturnbytes=0)
