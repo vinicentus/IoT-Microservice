@@ -86,6 +86,8 @@ with ShdlcSerialPort(port='/dev/ttyUSB1', baudrate=460800) as port:
                          expectedReturnbytes=6)
         print("Received data '{}' of length '{}'".format(
             list(map(lambda x: x.hex(), rx)), len(rx)))
+        print("CO2: {}ppm, TVOC: {}ppb".format(
+            int.from_bytes(rx[0], "big"), int.from_bytes(rx[1], "big")))
 
     # Perform a soft reset of all sensirion devices on the bus
     sendCommand(address=0x58, command=[0x00, 0x06],
