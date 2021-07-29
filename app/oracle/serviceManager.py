@@ -7,15 +7,17 @@ from datetime import date
 #from dbManager import get_entries_date_range, get_entries_from_date
 #from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
 
-import oracle.dbManager as dbManager
-import oracle.eeManager as eeManager
+import dbManager
+import eeManager
 # USED TO DEMO DECRYPTION
 #from eeManager import Decryptor, load_private_key, decode_base64_key_and_data
 
-a = '2021-3-25' # REMOVE BEFORE IMPLEMENTING
-b = '2021-3-26' # REMOVE BEFORE IMPLEMENTING
-the_key = eeManager.load_public_key('secrets/public_key.pem') # REMOVE BEFORE IMPLEMENTING
-the_secret = eeManager.load_private_key('secrets/private_key.pem') # REMOVE BEFORE IMPLEMENTING
+a = '2021-3-25'  # REMOVE BEFORE IMPLEMENTING
+b = '2021-3-26'  # REMOVE BEFORE IMPLEMENTING
+the_key = eeManager.load_public_key(
+    'secrets/public_key.pem')  # REMOVE BEFORE IMPLEMENTING
+the_secret = eeManager.load_private_key(
+    'secrets/private_key.pem')  # REMOVE BEFORE IMPLEMENTING
 max_day_range = 60
 
 
@@ -34,7 +36,7 @@ def date_compare(date1, date2):
     return delta.days
 
 
-def execute(_start_time, _stop_time, public_key=None):
+def execute(_start_time, _stop_time, public_key=None, tableName="sps30_output"):
     """
     Function that fetches data entries from database. If public_key is provided data is encrypted and then encoded.
     If no key is provided the data is only encoded.
@@ -60,8 +62,8 @@ def execute(_start_time, _stop_time, public_key=None):
     # FETCH DATA FROM DB
     # CHECK IF START DATE IS BEFORE STOP DATE
     if date_compare(start_time, stop_time) <= 0:
-        print('stop time was used',stop_time)
-        data = dbManager.get_entries_from_date(stop_time)
+        print('stop time was used', stop_time)
+        data = dbManager.get_entries_from_date(stop_time, tableName)
 
     else:
         alpha = time.strptime(start_time, "%Y-%m-%d")
@@ -75,18 +77,21 @@ def execute(_start_time, _stop_time, public_key=None):
             new_start_time = l_date - datetime.timedelta(max_day_range)
             print('delta.days > max_day_range:', new_start_time, stop_time)
             # TODO: check that this works with the new dattime column in the db
-            data = dbManager.get_entries_date_range(new_start_time, stop_time)
-        
+            data = dbManager.get_entries_date_range(
+                new_start_time, stop_time, tableName)
+
         else:
             print('last alt', start_time, stop_time)
             # TODO: check that this works with the new dattime column in the db
-            data = dbManager.get_entries_date_range(start_time, stop_time)
+            data = dbManager.get_entries_date_range(
+                start_time, stop_time, tableName)
 
     # ENCRYPTION & ENCODING
     if public_key is not None:
         bytes_data = bytes(str(data), 'utf-8')
         encryptor = eeManager.Encryptor(bytes_data, public_key)
-        data = eeManager.encode_base64_key_and_data(*encryptor.return_key_and_data())
+        data = eeManager.encode_base64_key_and_data(
+            *encryptor.return_key_and_data())
 
     # ENCODING
     else:
@@ -109,4 +114,3 @@ if __name__ == "__main__":
     x, y = decryptor.return_key_and_data()
     res = ast.literal_eval(y.decode('utf-8'))
     print(res)
-
