@@ -11,4 +11,3 @@ scd30.set_measurement_interval(60)
 scd30.start_periodic_measurement()
 
 time.sleep(1)
-        
