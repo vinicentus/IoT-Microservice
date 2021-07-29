@@ -1,4 +1,4 @@
-#These lines hould be added to the end of /boot/config.txt in order to make the display work
+#These lines should be added to the end of /boot/config.txt in order to make the display work
 
 disable_overscan=1
 
