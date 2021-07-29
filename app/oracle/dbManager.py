@@ -86,10 +86,10 @@ def add_entry(event_datetime, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
     cursor.close()
 
 
-def get_all_entries():
+def get_all_entries(tableName="sps30_output"):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = """SELECT * FROM sps30_output"""
+    sqlite_select_query = "SELECT * FROM {}".format(tableName)
     cursor.execute(sqlite_select_query)
     records = cursor.fetchall()
 
@@ -98,10 +98,11 @@ def get_all_entries():
     return records
 
 
-def get_entries_from_date(datetime):
+def get_entries_from_date(datetime, tableName="sps30_output"):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = "SELECT * FROM sps30_output WHERE datetime= ?"
+    sqlite_select_query = "SELECT * FROM {} WHERE datetime= ?".format(
+        tableName)
     cursor.execute(sqlite_select_query, (datetime,))
     records = cursor.fetchall()
 
@@ -111,10 +112,11 @@ def get_entries_from_date(datetime):
     return records
 
 
-def get_entries_datetime_range(start, stop):
+def get_entries_datetime_range(start, stop, tableName="sps30_output"):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
-    sqlite_select_query = "SELECT * FROM sps30_output WHERE datetime >= ? AND datetime <= ?"
+    sqlite_select_query = "SELECT * FROM {} WHERE datetime >= ? AND datetime <= ?".format(
+        tableName)
     cursor.execute(sqlite_select_query, (start, stop,))
     records = cursor.fetchall()
 
