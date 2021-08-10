@@ -1,6 +1,7 @@
 import sqlite3
 import os
-import pandas as pd
+#import pandas as pd
+from datetime import datetime, timezone
 
 
 path = os.path.dirname(os.path.abspath(__file__))
@@ -98,12 +99,21 @@ def get_all_entries(tableName="sps30_output"):
     return records
 
 
-def get_entries_from_date(datetime, tableName="sps30_output"):
+def convertTimeStampToUTCString(datetime: datetime):
+    # Used to convert a datetime object to the correct string format for passing to db.
+    # Example: 2021-07-29T10:18:03Z
+    # (it has to include leading zeroes, minutes and seconds, and an Z at the end)
+    return datetime.astimezone(
+        timezone.utc).isoformat(timespec="seconds").replace('+00:00', 'Z')
+
+
+def get_entries_from_date(datetime: datetime, tableName="sps30_output"):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
     sqlite_select_query = "SELECT * FROM {} WHERE datetime= ?".format(
         tableName)
-    cursor.execute(sqlite_select_query, (datetime,))
+    timestampString = convertTimeStampToUTCString(datetime)
+    cursor.execute(sqlite_select_query, (timestampString,))
     records = cursor.fetchall()
 
     sqliteConnection.commit()
@@ -112,12 +122,14 @@ def get_entries_from_date(datetime, tableName="sps30_output"):
     return records
 
 
-def get_entries_datetime_range(start, stop, tableName="sps30_output"):
+def get_entries_datetime_range(start: datetime, stop: datetime, tableName="sps30_output"):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
     sqlite_select_query = "SELECT * FROM {} WHERE datetime >= ? AND datetime <= ?".format(
         tableName)
-    cursor.execute(sqlite_select_query, (start, stop,))
+    startString = convertTimeStampToUTCString(start)
+    stopString = convertTimeStampToUTCString(stop)
+    cursor.execute(sqlite_select_query, (startString, stopString,))
     records = cursor.fetchall()
 
     sqliteConnection.commit()

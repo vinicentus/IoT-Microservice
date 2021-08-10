@@ -9,7 +9,7 @@ from sps30_driver import sps30
 scd30 = SCD30()
 
 if scd30.get_data_ready():
-    timestamp = datetime.datetime.utcnow().isoformat(timespec='seconds') + 'Z'
+    timestamp = convertTimeStampToUTCString(datetime.utcnow())
     m = scd30.read_measurement()
 
     if m is not None:

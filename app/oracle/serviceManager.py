@@ -1,9 +1,9 @@
 #!/home/pi/IoT-Microservice/venv/bin/python3
 import time
-import datetime
 import ast
 import argparse
-from datetime import date
+from datetime import datetime, timedelta
+from dateutil.parser import parse
 #from dbManager import get_entries_date_range, get_entries_from_date
 #from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
 
@@ -12,8 +12,6 @@ import eeManager
 # USED TO DEMO DECRYPTION
 #from eeManager import Decryptor, load_private_key, decode_base64_key_and_data
 
-a = '2021-3-25'  # REMOVE BEFORE IMPLEMENTING
-b = '2021-3-26'  # REMOVE BEFORE IMPLEMENTING
 the_key = eeManager.load_public_key(
     'secrets/public_key.pem')  # REMOVE BEFORE IMPLEMENTING
 the_secret = eeManager.load_private_key(
@@ -21,69 +19,64 @@ the_secret = eeManager.load_private_key(
 max_day_range = 60
 
 
-def date_compare(date1, date2):
+# Returns the timedelta in seconds
+def datetime_compare(timestamp1: datetime, timestamp2: datetime):
     """
     Support function for execute()
-    :param date1: start date format '%Y-%m-%d'
-    :param date2: stop date format '%Y-%m-%d'
-    :return: difference between the two dates in days.
+    :param date1: start date (as a datetime object)'
+    :param date2: stop date (as a datetime object)'
+    :return: difference between the two dates in seconds.
     """
-    alpha = time.strptime(date1, "%Y-%m-%d")
-    omega = time.strptime(date2, "%Y-%m-%d")
-    f_date = date(alpha.tm_year, alpha.tm_mon, alpha.tm_mday)
-    l_date = date(omega.tm_year, omega.tm_mon, omega.tm_mday)
-    delta = l_date - f_date
-    return delta.days
+    delta = timestamp2 - timestamp1
+    # We use seconds since our database stores timestamp with second precision
+    return delta.total_seconds()
 
 
-def execute(_start_time, _stop_time, public_key=None, tableName="sps30_output"):
+def execute(_start_time: datetime, _stop_time: datetime, public_key=None, tableName="sps30_output"):
     """
     Function that fetches data entries from database. If public_key is provided data is encrypted and then encoded.
     If no key is provided the data is only encoded.
-    :param _start_time: start date format '%Y-%m-%d'
-    :param _stop_time: stop date format '%Y-%m-%d'
+    :param _start_time: start date (as a datetime object)
+    :param _stop_time: stop date (as a datetime object)
     :param public_key:
     :return: encoded data.
     """
-    today = date.today()
+
+    # We don't use microseconds in the database, so we shouldn't need to use them here either
+    today = datetime.now().replace(microsecond=0)
 
     # CHECK IF START DATE IS IN THE FUTURE
-    if date_compare(_start_time, today.strftime('%Y-%m-%d')) <= 0:
-        start_time = today.strftime('%Y-%m-%d')
+    if datetime_compare(_start_time, today) <= 0:
+        start_time = today
     else:
         start_time = _start_time
 
     # CHECK IF STOP DATE IS IN THE FUTURE
-    if date_compare(_stop_time, today.strftime('%Y-%m-%d')) <= 0:
-        stop_time = today.strftime('%Y-%m-%d')
+    if datetime_compare(_stop_time, today) <= 0:
+        stop_time = today
     else:
         stop_time = _stop_time
 
     # FETCH DATA FROM DB
     # CHECK IF START DATE IS BEFORE STOP DATE
-    if date_compare(start_time, stop_time) <= 0:
+    if datetime_compare(start_time, stop_time) <= 0:
         print('stop time was used', stop_time)
         data = dbManager.get_entries_from_date(stop_time, tableName)
 
     else:
-        alpha = time.strptime(start_time, "%Y-%m-%d")
-        omega = time.strptime(stop_time, "%Y-%m-%d")
-        f_date = date(alpha.tm_year, alpha.tm_mon, alpha.tm_mday)
-        l_date = date(omega.tm_year, omega.tm_mon, omega.tm_mday)
-        delta = l_date - f_date
+        deltaSeconds = datetime_compare(start_time, stop_time)
+        deltaDays = timedelta(seconds=deltaSeconds).days
 
         # CHECK IF RANGE IS OUTSIDE SCOPE
-        if delta.days > max_day_range:
-            new_start_time = l_date - datetime.timedelta(max_day_range)
+        if deltaDays > max_day_range:
+            new_start_time = stop_time - timedelta(max_day_range)
             print('delta.days > max_day_range:', new_start_time, stop_time)
-            # TODO: check that this works with the new dattime column in the db
-            data = dbManager.get_entries_date_range(
+            data = dbManager.get_entries_datetime_range(
                 new_start_time, stop_time, tableName)
 
         else:
             print('last alt', start_time, stop_time)
-            # TODO: check that this works with the new dattime column in the db
-            data = dbManager.get_entries_date_range(
+            data = dbManager.get_entries_datetime_range(
                 start_time, stop_time, tableName)
 
     # ENCRYPTION & ENCODING
@@ -106,7 +99,8 @@ if __name__ == "__main__":
     parser.add_argument('stop')
     args = parser.parse_args()
 
-    runtime = execute(args.start, args.stop, the_key)
+    # try to parse any kind of datetime input
+    runtime = execute(parse(args.start), parse(args.stop), the_key)
     print(runtime)
 
     sym_key, data = eeManager.decode_base64_key_and_data(runtime)

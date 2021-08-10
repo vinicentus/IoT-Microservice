@@ -23,8 +23,7 @@ try:
 
     # PERFORMING MEASUREMENTS
     for i in range(samples_per_measurement):
-        timestamps.append(datetime.datetime.utcnow(
-        ).isoformat(timespec='seconds') + 'Z')
+        timestamps.append(convertTimeStampToUTCString(datetime.utcnow()))
         results.append(sensor_sps30.read_measured_values())
         time.sleep(1)
 

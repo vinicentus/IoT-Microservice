@@ -16,7 +16,7 @@ try:
     # TODO: Check that it is running in measurement mode
 
     # PERFORMING MEASUREMENTS
-    timestamp = datetime.datetime.utcnow().isoformat(timespec='seconds') + 'Z'
+    timestamp = convertTimeStampToUTCString(datetime.utcnow())
     result = sensor_sps30.read_measured_values()
     time.sleep(1)
 

@@ -105,7 +105,7 @@ with ShdlcSerialPort(port='/dev/ttyUSB1', baudrate=460800) as port:
         co2, tvoc = int.from_bytes(rx[0], "big"), int.from_bytes(rx[1], "big")
         print("CO2: {}ppm, TVOC: {}ppb".format(co2, tvoc))
 
-        timestamp = datetime.datetime.utcnow().isoformat(timespec='seconds') + 'Z'
+        timestamp = convertTimeStampToUTCString(datetime.now())
 
         if rx is not None:
             add_entry_svm30(timestamp, co2, tvoc)
