@@ -50,10 +50,12 @@ token_manager = blockchain_utils.contract(
 # ### ADD A USER WITH THE ADDRESS FROM CONFIG.YAML
 
 # %%
-user_manager.write({
+result = user_manager.write({
     'func': 'create',
     'params': []
 })
+
+print(result)
 
 # %% [markdown]
 # ### ADD AN ORACLE FOR THE CURRENT USER
@@ -64,13 +66,15 @@ user_manager.write({
 oracle_device = device_utils.create(device_info)
 
 # Create device in contract
-oracle_manager.write({
+result = oracle_manager.write({
     'func': 'create',
     'params': [
         oracle_device.hash,
         1  # This sets the required price for a task on this device
     ]
 })
+
+print(result)
 
 
 # %%
