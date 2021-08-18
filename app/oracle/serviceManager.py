@@ -7,15 +7,18 @@ from dateutil.parser import parse
 #from dbManager import get_entries_date_range, get_entries_from_date
 #from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
 
-import dbManager
-import eeManager
+from . import dbManager
+from . import eeManager
 # USED TO DEMO DECRYPTION
 #from eeManager import Decryptor, load_private_key, decode_base64_key_and_data
 
+from pathlib import Path
+this_dir = Path(__file__).parent
+
 the_key = eeManager.load_public_key(
-    'secrets/public_key.pem')  # REMOVE BEFORE IMPLEMENTING
+    this_dir/'secrets/public_key.pem')  # REMOVE BEFORE IMPLEMENTING
 the_secret = eeManager.load_private_key(
-    'secrets/private_key.pem')  # REMOVE BEFORE IMPLEMENTING
+    this_dir/'secrets/private_key.pem')  # REMOVE BEFORE IMPLEMENTING
 max_day_range = 60
 
 

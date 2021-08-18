@@ -347,7 +347,8 @@ modification_event = oracle.event('modification')
 print('AWAITING EVENTS...\n')
 
 # DYNAMICALLY IMPORT THE ORACLE SOFTWARE
-oracle_software = import_file('oracle/main.py')
+#oracle_software = import_file('oracle/main.py')
+from oracle import main as oracle_software
 func = oracle_software.perform_task
 
 while(True):
