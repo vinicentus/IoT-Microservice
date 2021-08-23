@@ -2,8 +2,8 @@
 import time
 import ast
 import argparse
-from datetime import datetime, timedelta
-from dateutil.parser import parse
+from datetime import datetime, timedelta, timezone
+from dateutil import parser
 #from dbManager import get_entries_date_range, get_entries_from_date
 #from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
 
@@ -35,30 +35,34 @@ def datetime_compare(timestamp1: datetime, timestamp2: datetime):
     return delta.total_seconds()
 
 
-def execute(_start_time: datetime, _stop_time: datetime, public_key=None, tableName="sps30_output"):
+def execute(_start_time: str, _stop_time: str, public_key=None, tableName="sps30_output"):
     """
     Function that fetches data entries from database. If public_key is provided data is encrypted and then encoded.
     If no key is provided the data is only encoded.
-    :param _start_time: start date (as a datetime object)
-    :param _stop_time: stop date (as a datetime object)
+    :param _start_time: start date formatted as an ISO-860 string
+    :param _stop_time: stop date formatted as an ISO-860 string
     :param public_key:
     :return: encoded data.
     """
 
+    _converted_start_time = parser.isoparse(_start_time)
+    _converted_stop_time = parser.isoparse(_stop_time)
+
     # We don't use microseconds in the database, so we shouldn't need to use them here either
-    today = datetime.now().replace(microsecond=0)
+    # This whole function uses UTC internally!
+    today = datetime.now(tz=timezone.utc).replace(microsecond=0)
 
     # CHECK IF START DATE IS IN THE FUTURE
-    if datetime_compare(_start_time, today) <= 0:
+    if datetime_compare(_converted_start_time, today) <= 0:
         start_time = today
     else:
-        start_time = _start_time
+        start_time = _converted_start_time
 
     # CHECK IF STOP DATE IS IN THE FUTURE
-    if datetime_compare(_stop_time, today) <= 0:
+    if datetime_compare(_converted_stop_time, today) <= 0:
         stop_time = today
     else:
-        stop_time = _stop_time
+        stop_time = _converted_stop_time
 
     # FETCH DATA FROM DB
     # CHECK IF START DATE IS BEFORE STOP DATE
@@ -102,8 +106,10 @@ if __name__ == "__main__":
     parser.add_argument('stop')
     args = parser.parse_args()
 
-    # try to parse any kind of datetime input
-    runtime = execute(parse(args.start), parse(args.stop), the_key)
+    # We don't need to parse the input here,
+    # instead we expect a correctly formatted ISO-8601 datetime string,
+    # that will be parsed in the excecute function
+    runtime = execute(args.start, args.stop, the_key)
     print(runtime)
 
     sym_key, data = eeManager.decode_base64_key_and_data(runtime)
