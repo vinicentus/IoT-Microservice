@@ -10,13 +10,17 @@ from . import serviceManager as sm
 def perform_task(task, params):
     print('\tORACLE TRIGGERED')
     print(params)
-    data = sm.execute(**params)
-    print(type(data))
-    return data
+    try:
+        # Check for invalid data
+        # In the future we might want to start rate limiting if we get many tasks with invalid parameters.
+        data = sm.execute(**params)
+        print(type(data))
+        return data
+    except TypeError as error:
+        # TODO: format this as base64 and possibly encrypt it as well!
+        errorString = 'Error in task excecution: {}'.format(error)
+        print(errorString)
+        return errorString
 
 
 # In[ ]:
-
-
-
-
