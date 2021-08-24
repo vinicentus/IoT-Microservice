@@ -14,6 +14,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
+from websockets.exceptions import ConnectionClosedError
 
 # In[2]:
 
@@ -252,10 +253,15 @@ def perform_task(task, func):
     result = func(task, decoded)
 
     # SUBMIT THE TASK RESULT
-    task_manager.write({
-        'func': 'complete',
-        'params': [task, result]
-    })
+    try:
+        task_manager.write({
+            'func': 'complete',
+            'params': [task, result]
+        })
+    except ConnectionClosedError as e:
+        # TODO: format this as base64 and possibly encrypt it as well!
+        task_manager.write({'func': 'complete',
+                            'params': [task, str(e)]})
 
     # SHOW MSG
     print('TASK COMPLETED')
