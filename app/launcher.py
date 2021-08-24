@@ -258,13 +258,15 @@ def perform_task(task, func):
             'func': 'complete',
             'params': [task, result]
         })
+        # SHOW MSG
+        print('TASK COMPLETED')
     except ConnectionClosedError as e:
+        errorString = 'TASK COMPLETED WITH ERROR: {}'.format(e)
         # TODO: format this as base64 and possibly encrypt it as well!
         task_manager.write({'func': 'complete',
-                            'params': [task, str(e)]})
-
-    # SHOW MSG
-    print('TASK COMPLETED')
+                            'params': [task, errorString]})
+        # SHOW MSG
+        print(errorString)
 
 
 # ### DISCOVERY RESPONSES
