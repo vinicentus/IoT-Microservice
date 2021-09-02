@@ -65,6 +65,8 @@ print(result)
 # Create device using generated hash from idenifiers.yaml
 oracle_device = device_utils.create(device_info)
 
+
+# %%
 # Create device in contract
 result = oracle_manager.write({
     'func': 'create',
@@ -75,6 +77,45 @@ result = oracle_manager.write({
 })
 
 print(result)
+
+
+# %%
+# FETCH & SERIALIZE ORACLE CONTRACT
+temp_contract = blockchain_utils.contract({
+    'address': oracle_manager.read({
+        'func': 'fetch_oracle',
+        'params': oracle_device.hash
+    }),
+    'abi': latest['oracle']['abi']
+}, web3, settings)
+
+
+# %%
+# VERIFY ORACLE CONTRACT EXISTENCE
+if temp_contract.address != '0x0000000000000000000000000000000000000000':
+    oracle_device.set_contract(temp_contract)
+
+else:
+    print('THE ORACLE IS NOT REGISTERED, ABORTING..')
+    sys.exit(0)
+
+
+# %%
+# Activate the device/oracle
+# Note that this toggles the active status,
+# and so can also be used to deactivate the oracle
+result = oracle_device.write({
+    'func': 'toggle_active',
+    'params': []
+})
+
+print(result)
+
+
+# %%
+# Check that the oracle is active
+active = oracle_device.read('active')
+print(active)
 
 
 # %%
