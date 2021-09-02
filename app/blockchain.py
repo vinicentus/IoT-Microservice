@@ -8,6 +8,8 @@ import sys
 from web3 import Web3
 
 
+# ### CONNECT TO THE BLOCKCHAIN
+
 # In[2]:
 
 
@@ -30,6 +32,8 @@ def connect(settings):
         print('COULD NOT CONNECT TO GATEWAY!')
         sys.exit(0)
 
+
+# ### UNIFORM SMART CONTRACT
 
 # In[3]:
 
@@ -99,3 +103,6 @@ class contract:
     # EVENT FILTER
     def event(self, name):
         return self.contract.events[name].createFilter(fromBlock='latest')
+
+
+# In[ ]:
