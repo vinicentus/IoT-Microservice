@@ -18,6 +18,7 @@ def connect(settings):
                                   ['host'], settings['gateway']['port'])
 
     # CREATE A WEB3 INSTANCE
+    # websocket_kwargs=dict(max_size=None)
     instance = Web3(Web3.WebsocketProvider(address))
 
     # CHECK INSTANCE CONNECTION
