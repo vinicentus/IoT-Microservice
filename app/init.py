@@ -12,7 +12,7 @@ import blockchain as blockchain
 
 # In[3]:
 
-
+# We need to use special credentials with more permisisons here...
 settings = utils.load_yaml('resources/init_settings.yaml')
 
 
