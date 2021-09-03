@@ -13,7 +13,7 @@ import blockchain as blockchain
 # In[3]:
 
 
-settings = utils.load_yaml('resources/settings.yaml')
+settings = utils.load_yaml('resources/init_settings.yaml')
 
 
 # In[4]:

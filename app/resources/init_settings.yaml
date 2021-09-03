@@ -1,0 +1,14 @@
+# ETHEREUM GATEWAY
+gateway:
+    host: 127.0.0.1
+    port: 8545
+
+# ETHEREUM KEYS
+keys:
+    public: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1 '
+    private: '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d'
+
+# WHISPER PARAMS
+whisper:
+    topic: arca
+    symkey: 23e92ca5c0f73e07291c628395f4e7ad6ebddb1ed567214962cb368be8c19442
