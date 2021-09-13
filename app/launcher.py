@@ -8,12 +8,6 @@ from oracle import main as oracle_software
 import subprocess
 import sys
 import time
-from import_file import import_file
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.asymmetric import padding
 from websockets.exceptions import ConnectionClosedError
 
 # In[2]:
