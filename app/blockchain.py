@@ -16,12 +16,13 @@ from web3 import Web3
 def connect(settings):
 
     # WEBSOCKET ADDRESS
-    address = 'ws://{}:{}'.format(settings['gateway']
+    address = 'http://{}:{}'.format(settings['gateway']
                                   ['host'], settings['gateway']['port'])
 
     # CREATE A WEB3 INSTANCE
     # websocket_kwargs=dict(max_size=None)
-    instance = Web3(Web3.WebsocketProvider(address))
+    # request_kwargs=dict(timeout=15)
+    instance = Web3(Web3.HTTPProvider(address))
 
     # CHECK INSTANCE CONNECTION
     if instance.isConnected():
