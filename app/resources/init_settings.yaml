@@ -8,7 +8,7 @@ chainId: 11865
 # ETHEREUM KEYS
 keys:
     public: '0x1e0DdDfA3aD438a204EA08864f85Bfb7615a83A3'
-    private: 'd5e1e3948fb89fe4c199d89e96d3a7cc4722823772efbe9960b1cec64f5061ad'
+    private: '0xd5e1e3948fb89fe4c199d89e96d3a7cc4722823772efbe9960b1cec64f5061ad'
 
 # WHISPER PARAMS
 whisper:
