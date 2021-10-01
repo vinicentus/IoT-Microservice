@@ -3,6 +3,8 @@ gateway:
     host: 192.168.13.203
     port: 8545
 
+chainId: 11865
+
 # ETHEREUM KEYS
 keys:
     public: '0x1e0DdDfA3aD438a204EA08864f85Bfb7615a83A3'

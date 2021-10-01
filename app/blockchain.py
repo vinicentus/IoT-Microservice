@@ -74,6 +74,7 @@ class contract:
             tx = {
                 'from': self.settings['keys']['public'],
                 'to': self.contract.address,
+                'chainId': self.settings['chainId'],
                 'data': self.contract.encodeABI(
                     fn_name=details['func'],
                     args=details['params']
