@@ -1,12 +1,12 @@
 # ETHEREUM GATEWAY
 gateway:
-    host: 127.0.0.1
+    host: 192.168.13.203
     port: 8545
 
 # ETHEREUM KEYS
 keys:
-    public: '0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1'
-    private: '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d'
+    public: '0x1e0DdDfA3aD438a204EA08864f85Bfb7615a83A3'
+    private: 'd5e1e3948fb89fe4c199d89e96d3a7cc4722823772efbe9960b1cec64f5061ad'
 
 # WHISPER PARAMS
 whisper:
