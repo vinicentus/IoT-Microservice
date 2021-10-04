@@ -10,6 +10,19 @@ import base64
 import hashlib
 import zipfile
 import os
+import inspect
+
+# In[2]:
+
+
+def abs_dir_of_caller(path):
+    # Absolute path for the directory of the file of the caller
+    # Example: this function is called from another file /home/example/project/test.py. Then the absolute_dir_path is /home/example/project/
+    # old method: os.path.dirname(__file__)
+    absolute_file_path = inspect.stack()[1].filename
+    absolute_dir_path = os.path.dirname(absolute_file_path)
+    complete_path = os.path.join(absolute_dir_path, path)
+    return complete_path
 
 
 # ### LOAD YAML FILE
@@ -18,7 +31,9 @@ import os
 
 
 def load_yaml(path):
-    with open(path, mode='r') as file:
+    complete_path = abs_dir_of_caller(path)
+
+    with open(complete_path, mode='r') as file:
         return yaml.load(file, Loader=yaml.FullLoader)
 
 
@@ -28,7 +43,9 @@ def load_yaml(path):
 
 
 def load_json(path):
-    with open(path) as json_file:
+    complete_path = abs_dir_of_caller(path)
+    
+    with open(complete_path) as json_file:
         return json.load(json_file)
 
 
@@ -36,7 +53,9 @@ def load_json(path):
 
 
 def save_json(data, path):
-    with open(path, 'w') as outfile:
+    complete_path = abs_dir_of_caller(path)
+    
+    with open(complete_path, 'w') as outfile:
         json.dump(data, outfile)
 
 
