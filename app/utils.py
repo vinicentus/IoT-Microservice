@@ -44,7 +44,7 @@ def load_yaml(path):
 
 def load_json(path):
     complete_path = abs_dir_of_caller(path)
-    
+
     with open(complete_path) as json_file:
         return json.load(json_file)
 
@@ -54,7 +54,7 @@ def load_json(path):
 
 def save_json(data, path):
     complete_path = abs_dir_of_caller(path)
-    
+
     with open(complete_path, 'w') as outfile:
         json.dump(data, outfile)
 
@@ -65,14 +65,14 @@ def save_json(data, path):
 
 
 def encode(data):
-    
+
     # STRINGIFY & CONVERT TO BYTES
     stringified = json.dumps(data)
     to_bytes = str.encode(stringified)
-    
+
     # ENCODE
     encoded = base64.b64encode(to_bytes)
-    
+
     # RETURN AS STRING
     return encoded.decode()
 
@@ -81,12 +81,12 @@ def encode(data):
 
 
 def decode(compressed):
-    
+
     # ATTEMPT TO DECODE & PARSE AS JSON
     try:
         to_bytes = base64.b64decode(compressed)
         return json.loads(to_bytes)
-    
+
     # OTHERWISE, RETURN EMPTY OBJECT
     except:
         return {}
@@ -98,10 +98,11 @@ def decode(compressed):
 
 
 def filter_backlog(data):
-    
+
     # FILTER ZEROS
-    filtered = filter(lambda x: x != '0x0000000000000000000000000000000000000000', data)
-    
+    filtered = filter(
+        lambda x: x != '0x0000000000000000000000000000000000000000', data)
+
     # CONVERT TO LIST & RETURN
     return list(filtered)
 
@@ -112,28 +113,28 @@ def filter_backlog(data):
 
 
 def compare_discovery(data, base):
-    
+
     # RESULT CONTAINER
     result = []
-    
+
     # LOOP THROUGH DATA KEYS
     for key in data:
-        
+
         # IF THE KEY EXISTS IN THE BASE DICT
         if key in base:
-            
+
             # IF THE VALUE IS SAME IN BOTH DATASET
             if data[key] == base[key]:
                 result.append(True)
-                
+
             # OTHERWISE, DEFAULT TO FALSE
             else:
                 result.append(False)
-                
+
         # OTHERWISE, DEFAULT TO FALSE
         else:
             result.append(False)
-            
+
     # FINALLY RETURN RESULT
     return result
 
@@ -152,27 +153,27 @@ def generate_checksum(path):
 
 
 def verify_checksums(prefix):
-    
+
     # LOAD CHECKSUMS & EXTRACT FILENAMES
     checksums = load_json(prefix + 'checksums.json')
     files = list(checksums.keys())
-    
+
     # RESULT CONTAINER
     results = []
-    
+
     # LOOP THROUGH FILES
     for file in files:
-        
+
         # GENERATE CHECKSUM FOR FILE
         checksum = generate_checksum(prefix + file)
-        
+
         # VERIFY & PUSH RESULT
         results.append(checksum == checksums[file])
-    
+
     # IF ALL FILES PASS, RETURN TRUE
     if (results.count(False) == 0):
         return True
-    
+
     # OTHERWISE, RETURN FALSE
     return False
 
@@ -193,7 +194,8 @@ def unzip(path, target):
 def create_zip(files, prefix, path):
     with zipfile.ZipFile(prefix + path, 'w') as zipF:
         for file in files:
-            zipF.write(os.path.join(prefix, file), file, compress_type=zipfile.ZIP_DEFLATED)
+            zipF.write(os.path.join(prefix, file), file,
+                       compress_type=zipfile.ZIP_DEFLATED)
 
 
 # ### DECRYPT PRIVATE KEY
@@ -216,25 +218,21 @@ def decrypt_key(path, password, web3):
 
 def gather_files(directory):
     container = []
-    
+
     # LOOP THROUGH FILES
     for subdir, dirs, files in os.walk(directory[:-1]):
         for file in files:
-            
+
             # CONSTRUCT FULL PATH
             filepath = subdir + os.sep + file
 
             # REMOVE THE PREFIX
             filepath = filepath.replace(directory, '')
-            
+
             # APPEND TO THE CONTAINER
             container.append(filepath)
-            
+
     return container
 
 
 # In[ ]:
-
-
-
-
