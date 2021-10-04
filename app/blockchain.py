@@ -17,7 +17,7 @@ def connect(settings):
 
     # WEBSOCKET ADDRESS
     address = 'http://{}:{}'.format(settings['gateway']
-                                  ['host'], settings['gateway']['port'])
+                                    ['host'], settings['gateway']['port'])
 
     # CREATE A WEB3 INSTANCE
     # websocket_kwargs=dict(max_size=None)
@@ -68,39 +68,34 @@ class contract:
 
     # WRITE TO CONTRACT
     def write(self, details):
-        try:
+        # CREATE BASE TRANSACTION
+        # IF THE TRANSACTION IS REVERTED, WE CATCH THE ERROR HIGHER UP FROM WHERE THIS FUNCTION WAS CALLED
+        tx = {
+            'from': self.settings['keys']['public'],
+            'to': self.contract.address,
+            'chainId': self.settings['chainId'],
+            'data': self.contract.encodeABI(
+                fn_name=details['func'],
+                args=details['params']
+            )
+        }
 
-            # CREATE BASE TRANSACTION
-            tx = {
-                'from': self.settings['keys']['public'],
-                'to': self.contract.address,
-                'chainId': self.settings['chainId'],
-                'data': self.contract.encodeABI(
-                    fn_name=details['func'],
-                    args=details['params']
-                )
-            }
+        # ESTIMATE GAS VALUE & STITCH IN REMAINING PROPS
+        tx['gas'] = self.web3.eth.estimateGas(tx)
+        tx['gasPrice'] = self.web3.toWei(20, 'gwei')
+        tx['nonce'] = self.web3.eth.getTransactionCount(
+            self.settings['keys']['public'])
 
-            # ESTIMATE GAS VALUE & STITCH IN REMAINING PROPS
-            tx['gas'] = self.web3.eth.estimateGas(tx)
-            tx['gasPrice'] = self.web3.toWei(20, 'gwei')
-            tx['nonce'] = self.web3.eth.getTransactionCount(
-                self.settings['keys']['public'])
+        # SIGN TRANSCTION WITH PRIVATE KEY
+        signed = self.web3.eth.account.sign_transaction(tx,
+                                                        private_key=self.settings['keys']['private']
+                                                        )
 
-            # SIGN TRANSCTION WITH PRIVATE KEY
-            signed = self.web3.eth.account.sign_transaction(tx,
-                                                            private_key=self.settings['keys']['private']
-                                                            )
+        # SEND THE TRANSACTION
+        tx_hash = self.web3.eth.sendRawTransaction(signed.rawTransaction)
 
-            # SEND THE TRANSACTION
-            tx_hash = self.web3.eth.sendRawTransaction(signed.rawTransaction)
-
-            # WAIT FOR IT TO BE MINED
-            return self.web3.eth.waitForTransactionReceipt(tx_hash, 500)
-
-        # IF THE TRANSACTION IS REVERTED, SHOW ERROR
-        except ValueError as error:
-            return error
+        # WAIT FOR IT TO BE MINED
+        return self.web3.eth.waitForTransactionReceipt(tx_hash, 500)
 
     # EVENT FILTER
     def event(self, name):
