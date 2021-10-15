@@ -19,7 +19,7 @@ settings = utils.load_yaml('resources/init_settings.yaml')
 # In[4]:
 
 
-latest = utils.load_json('resources/latest.json')
+latest = utils.load_json('resources/ABI.json')
 
 
 # ### CONNECT TO ETHEREUM GATEWAY

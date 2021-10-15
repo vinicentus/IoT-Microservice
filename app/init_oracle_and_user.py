@@ -13,7 +13,7 @@ import device as device_utils
 device_settings = utils.load_yaml('resources/device_settings.yaml')
 
 # %%
-latest = utils.load_json('resources/latest.json')
+latest = utils.load_json('resources/ABI.json')
 
 # %% [markdown]
 # ### CONNECT TO ETHEREUM GATEWAY

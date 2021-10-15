@@ -35,7 +35,7 @@ device_settings = utils.load_yaml('resources/device_settings.yaml')
 # In[ ]:
 
 
-latest = utils.load_json('resources/latest.json')
+latest = utils.load_json('resources/ABI.json')
 
 
 # ### CONNECT TO ETHEREUM GATEWAY
