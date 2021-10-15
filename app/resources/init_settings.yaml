@@ -1,3 +1,5 @@
+# This file is only used for contract initialization, and is not really part of the oracle
+
 # ETHEREUM GATEWAY
 gateway:
     host: 192.168.13.203
@@ -9,8 +11,3 @@ chainId: 11865
 keys:
     public: '0x1e0DdDfA3aD438a204EA08864f85Bfb7615a83A3'
     private: '0xd5e1e3948fb89fe4c199d89e96d3a7cc4722823772efbe9960b1cec64f5061ad'
-
-# WHISPER PARAMS
-whisper:
-    topic: arca
-    symkey: 23e92ca5c0f73e07291c628395f4e7ad6ebddb1ed567214962cb368be8c19442

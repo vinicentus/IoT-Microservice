@@ -10,40 +10,38 @@ import device as device_utils
 # ### LOAD RESOURCES
 
 # %%
-settings = utils.load_yaml('resources/settings.yaml')
-
+device_settings = utils.load_yaml('resources/device_settings.yaml')
 
 # %%
 latest = utils.load_json('resources/latest.json')
-
-# %%
-device_info = utils.load_yaml('resources/identifier.yaml')
 
 # %% [markdown]
 # ### CONNECT TO ETHEREUM GATEWAY
 
 # %%
-web3 = blockchain_utils.connect(settings)
+web3 = blockchain_utils.connect(device_settings)
 
 # %% [markdown]
 # ### SERIALIZE MANAGER CONTRACTS
 
 # %%
-user_manager = blockchain_utils.contract(latest['usermanager'], web3, settings)
+user_manager = blockchain_utils.contract(
+    latest['usermanager'], web3, device_settings)
 
 
 # %%
 oracle_manager = blockchain_utils.contract(
-    latest['oraclemanager'], web3, settings)
+    latest['oraclemanager'], web3, device_settings)
 
 
 # %%
-task_manager = blockchain_utils.contract(latest['taskmanager'], web3, settings)
+task_manager = blockchain_utils.contract(
+    latest['taskmanager'], web3, device_settings)
 
 
 # %%
 token_manager = blockchain_utils.contract(
-    latest['tokenmanager'], web3, settings)
+    latest['tokenmanager'], web3, device_settings)
 
 
 # %% [markdown]
@@ -63,7 +61,7 @@ print(result)
 
 # %%
 # Create device using generated hash from idenifiers.yaml
-oracle_device = device_utils.create(device_info)
+oracle_device = device_utils.create(device_settings)
 
 
 # %%
@@ -71,7 +69,7 @@ oracle_device = device_utils.create(device_info)
 result = oracle_manager.write({
     'func': 'create',
     'params': [
-        oracle_device.hash,
+        oracle_device.unique_id,
         1  # This sets the required price for a task on this device
     ]
 })
@@ -84,10 +82,10 @@ print(result)
 temp_contract = blockchain_utils.contract({
     'address': oracle_manager.read({
         'func': 'fetch_oracle',
-        'params': oracle_device.hash
+        'params': oracle_device.unique_id
     }),
     'abi': latest['oracle']['abi']
-}, web3, settings)
+}, web3, device_settings)
 
 
 # %%

@@ -29,7 +29,7 @@ import device as device_utils
 # In[ ]:
 
 
-settings = utils.load_yaml('resources/settings.yaml')
+device_settings = utils.load_yaml('resources/device_settings.yaml')
 
 
 # In[ ]:
@@ -38,18 +38,12 @@ settings = utils.load_yaml('resources/settings.yaml')
 latest = utils.load_json('resources/latest.json')
 
 
-# In[ ]:
-
-
-device_info = utils.load_yaml('resources/identifier.yaml')
-
-
 # ### CONNECT TO ETHEREUM GATEWAY
 
 # In[ ]:
 
 
-web3 = blockchain_utils.connect(settings)
+web3 = blockchain_utils.connect(device_settings)
 
 
 # ### EXTRACT THE WHISPER API
@@ -67,7 +61,7 @@ web3 = blockchain_utils.connect(settings)
 # In[ ]:
 
 
-oracle = device_utils.create(device_info)
+oracle = device_utils.create(device_settings)
 
 
 # ### SERIALIZE NECESSARY MANAGER CONTRACTS
@@ -76,13 +70,13 @@ oracle = device_utils.create(device_info)
 
 
 oracle_manager = blockchain_utils.contract(
-    latest['oraclemanager'], web3, settings)
+    latest['oraclemanager'], web3, device_settings)
 
 
 # In[ ]:
 
 
-task_manager = blockchain_utils.contract(latest['taskmanager'], web3, settings)
+task_manager = blockchain_utils.contract(latest['taskmanager'], web3, device_settings)
 
 
 # ### FETCH & SERIALIZE ORACLE CONTRACT
@@ -93,10 +87,10 @@ task_manager = blockchain_utils.contract(latest['taskmanager'], web3, settings)
 temp_contract = blockchain_utils.contract({
     'address': oracle_manager.read({
         'func': 'fetch_oracle',
-        'params': oracle.hash
+        'params': oracle.unique_id
     }),
     'abi': latest['oracle']['abi']
-}, web3, settings)
+}, web3, device_settings)
 
 
 # ### VERIFY ORACLE CONTRACT EXISTENCE
@@ -237,7 +231,7 @@ def perform_task(task, func):
     task_contract = blockchain_utils.contract({
         'address': task,
         'abi': latest['task']['abi']
-    }, web3, settings)
+    }, web3, device_settings)
 
     # FETCH & DECODE TASK PARAMS
     params = task_contract.read('params')
@@ -303,7 +297,7 @@ def process_message(event):
             response = utils.encode({
                 'type': 'response',
                 'source': payload,
-                'oracle': oracle.hash
+                'oracle': oracle.unique_id
             })
 
             # SLEEP FOR 2 SECONDS
@@ -311,9 +305,9 @@ def process_message(event):
 
             # RESPOND TO REQUEST
             shh.post({
-                'symKeyID': settings['whisper']['symkey'],
+                'symKeyID': device_settings['whisper']['symkey'],
                 'payload': web3.toHex(text=response),
-                'topic': web3.toHex(text=settings['whisper']['topic']),
+                'topic': web3.toHex(text=device_settings['whisper']['topic']),
                 'sig': whisper_id,
                 'powTarget': 2.5,
                 'powTime': 2

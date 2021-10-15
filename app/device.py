@@ -15,7 +15,7 @@ import hashlib
 
 class create():
     def __init__(self, data):
-        self.hash = hash_id(data)
+        self.unique_id = json_encode(data)
     
     # LOCATE & SET DEVICE CONTRACT ADDRESS
     def set_contract(self, contract):
@@ -34,23 +34,19 @@ class create():
         return self.contract.event(name)
 
 
-# ### HASH DEVICE IDENTIFIER
+# ### DEVICE IDENTIFIER
 
 # In[13]:
 
 
-def hash_id(data):
+def json_encode(data):
+
+    id_data = data['id']
     
     # REMOVE WHITESPACES
-    to_string = json.dumps(data, separators=(',', ':'))
+    to_string = json.dumps(id_data, separators=(',', ':'))
     
-    # ENCODE THE STRING WITH UTF8
-    encoded = to_string.encode('utf-8')
-    
-    # HASH ENCODED DATA
-    hashed = hashlib.sha256(encoded).hexdigest()
-    
-    return hashed
+    return to_string
 
 
 # In[ ]:
