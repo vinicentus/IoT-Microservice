@@ -1,3 +1,6 @@
 [submodule "rpi-i2c-timings"]
 	path = rpi-i2c-timings
 	url = https://github.com/RequestForCoffee/rpi-i2c-timings
+[submodule "app/oracle/raspberry_pi_i2c_scd4x_python"]
+	path = app/oracle/raspberry_pi_i2c_scd4x_python
+	url = https://github.com/vinicentus/raspberry_pi_i2c_scd4x_python
