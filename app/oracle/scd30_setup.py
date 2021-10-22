@@ -2,7 +2,6 @@
 # CHANGE PYTHON PATH TO MATCH YOUR LOCAL INSTALLATION
 import time
 from scd30_i2c import SCD30
-from sps30_driver import sps30
 
 
 scd30 = SCD30()

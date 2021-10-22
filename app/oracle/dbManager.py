@@ -79,7 +79,7 @@ def add_entry_scd41(event_datetime, d1, d2, d3):
     cursor.close()
 
 
-def add_entry(event_datetime, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
+def add_entry_sps30(event_datetime, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
     print("Connected to SQLite")

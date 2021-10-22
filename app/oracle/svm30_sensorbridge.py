@@ -6,7 +6,7 @@ import datetime
 from sensirion_shdlc_driver import ShdlcSerialPort, ShdlcConnection
 from sensirion_shdlc_sensorbridge import SensorBridgePort, SensorBridgeShdlcDevice
 from crccheck.crc import Crc8Nrsc5
-from dbManager import *
+from dbManager import add_entry_svm30, convertTimeStampToUTCString
 
 # data = bytearray.fromhex("BEEF")
 # crc = Crc8Nrsc5.calc(data)

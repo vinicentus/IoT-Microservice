@@ -1,9 +1,8 @@
 #!/home/pi/IoT-Microservice/venv/bin/python3
 # CHANGE PYTHON PATH TO MATCH YOUR LOCAL INSTALLATION
-import datetime
+from datetime import datetime
 from scd30_i2c import SCD30
-from dbManager import *
-from sps30_driver import sps30
+from dbManager import add_entry_scd30, convertTimeStampToUTCString
 
 
 scd30 = SCD30()

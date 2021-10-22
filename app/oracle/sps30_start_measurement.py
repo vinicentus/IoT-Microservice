@@ -1,6 +1,5 @@
 #!/home/pi/IoT-Microservice/venv/bin/python3
 # CHANGE PYTHON PATH TO MATCH YOUR LOCAL INSTALLATION
-from dbManager import *
 from sps30_driver import sps30
 
 

@@ -1,9 +1,9 @@
 #!/home/pi/IoT-Microservice/venv/bin/python3
 # CHANGE PYTHON PATH TO MATCH YOUR LOCAL INSTALLATION
 import time
-import datetime
+from datetime import datetime
 import numpy as np
-from dbManager import *
+from dbManager import add_entry_sps30, convertTimeStampToUTCString
 from sps30_driver import sps30
 
 
@@ -38,7 +38,7 @@ try:
     aggr_data = np_data.mean(axis=0)
 
     # ADD DATA SAVING
-    add_entry(timestamps[-1], aggr_data[0], aggr_data[1], aggr_data[2], aggr_data[3], aggr_data[4],
-              aggr_data[5], aggr_data[6], aggr_data[7], aggr_data[8], aggr_data[9])
+    add_entry_sps30(timestamps[-1], aggr_data[0], aggr_data[1], aggr_data[2], aggr_data[3], aggr_data[4],
+                    aggr_data[5], aggr_data[6], aggr_data[7], aggr_data[8], aggr_data[9])
 except NotImplemented:
     exit()

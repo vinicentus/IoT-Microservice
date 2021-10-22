@@ -1,9 +1,8 @@
 #!/home/pi/IoT-Microservice/venv/bin/python3
 # CHANGE PYTHON PATH TO MATCH YOUR LOCAL INSTALLATION
 import time
-import datetime
-import numpy as np
-from dbManager import *
+from datetime import datetime
+from dbManager import add_entry_sps30, convertTimeStampToUTCString
 from sps30_driver import sps30
 
 
@@ -26,8 +25,8 @@ try:
     # ERROR HANDLING
     if (len(result) == 10):
         # ADD DATA SAVING
-        add_entry(timestamp, result[0], result[1], result[2], result[3], result[4],
-                  result[5], result[6], result[7], result[8], result[9])
+        add_entry_sps30(timestamp, result[0], result[1], result[2], result[3], result[4],
+                        result[5], result[6], result[7], result[8], result[9])
     else:
         # Print the error message
         print(result[0])
