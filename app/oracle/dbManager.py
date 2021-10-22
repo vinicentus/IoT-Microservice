@@ -55,6 +55,30 @@ def add_entry_scd30(event_datetime, d1, d2, d3):
     cursor.close()
 
 
+def add_entry_scd41(event_datetime, d1, d2, d3):
+    sqliteConnection = sqlite3.connect(db)
+    cursor = sqliteConnection.cursor()
+    print("Connected to SQLite")
+
+    sqlite_create_table_query = '''CREATE TABLE IF NOT EXISTS scd41_output (
+                                       datetime timestamp,
+                                       d1 INTEGER,
+                                       d2 REAL,
+                                       d3 REAL);'''
+
+    cursor = sqliteConnection.cursor()
+    cursor.execute(sqlite_create_table_query)
+
+    sqlite_insert_with_param = """INSERT INTO 'scd41_output'
+                          ('datetime', 'd1', 'd2', 'd3') 
+                          VALUES (?, ?, ?, ?);"""
+
+    data_tuple = (event_datetime, d1, d2, d3)
+    cursor.execute(sqlite_insert_with_param, data_tuple)
+    sqliteConnection.commit()
+    cursor.close()
+
+
 def add_entry(event_datetime, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()

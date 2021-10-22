@@ -7,4 +7,7 @@
 30 4 * * SUN cd /home/pi/IoT-Microservice/app/oracle/ && ./sps30_sensor_clean_oneshot.py
 
 * * * * * cd /home/pi/IoT-Microservice/app/oracle/ && ./scd30_collect_data.py
+
+* * * * * cd /home/pi/IoT-Microservice/app/oracle/ && ./scd41_collect_data.py
+
 # blank line needed att end of file to function properly
