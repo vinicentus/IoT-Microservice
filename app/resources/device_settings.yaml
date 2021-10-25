@@ -12,7 +12,7 @@ id:
     # Currently valid values (in this example implementation) are:
     #   - 'sps30'
     #   - 'scd30'
-    #   - 'scd40'
+    #   - 'scd41'
     #   - 'svm30'
     sensors:
         - 'sps30'
