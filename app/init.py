@@ -6,7 +6,6 @@
 
 import utils as utils
 import blockchain as blockchain
-from read_contracts import read_contracts
 
 
 # ### LOAD RESOURCES
@@ -20,7 +19,7 @@ settings = utils.load_yaml('resources/init_settings.yaml')
 # In[4]:
 
 
-latest = read_contracts()
+latest = utils.read_contracts()
 
 
 # ### CONNECT TO ETHEREUM GATEWAY

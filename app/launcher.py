@@ -9,7 +9,6 @@ import subprocess
 import sys
 import time
 from websockets.exceptions import ConnectionClosedError
-from read_contracts import read_contracts
 
 # In[2]:
 
@@ -37,7 +36,7 @@ device_settings = utils.load_yaml('resources/device_settings.yaml')
 
 
 # CONTAINER FOR DATA
-latest = read_contracts()
+latest = utils.read_contracts()
 
 
 # ### CONNECT TO ETHEREUM GATEWAY
