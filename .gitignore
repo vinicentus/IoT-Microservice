@@ -140,6 +140,9 @@ private_key.pem
 public_key.pem
 secret.key
 
+# contract ABI and deployment files (should be copied over manually)
+app/resources/contracts/
+
 # database
 sensor_data.db
 

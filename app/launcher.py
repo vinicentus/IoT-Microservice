@@ -9,6 +9,7 @@ import subprocess
 import sys
 import time
 from websockets.exceptions import ConnectionClosedError
+from read_contracts import read_contracts
 
 # In[2]:
 
@@ -35,7 +36,8 @@ device_settings = utils.load_yaml('resources/device_settings.yaml')
 # In[ ]:
 
 
-latest = utils.load_json('resources/ABI.json')
+# CONTAINER FOR DATA
+latest = read_contracts()
 
 
 # ### CONNECT TO ETHEREUM GATEWAY
@@ -76,7 +78,8 @@ oracle_manager = blockchain_utils.contract(
 # In[ ]:
 
 
-task_manager = blockchain_utils.contract(latest['taskmanager'], web3, device_settings)
+task_manager = blockchain_utils.contract(
+    latest['taskmanager'], web3, device_settings)
 
 
 # ### FETCH & SERIALIZE ORACLE CONTRACT

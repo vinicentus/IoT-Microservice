@@ -5,6 +5,7 @@
 import utils as utils
 import blockchain as blockchain_utils
 import device as device_utils
+from read_contracts import read_contracts
 
 # %% [markdown]
 # ### LOAD RESOURCES
@@ -13,7 +14,7 @@ import device as device_utils
 device_settings = utils.load_yaml('resources/device_settings.yaml')
 
 # %%
-latest = utils.load_json('resources/ABI.json')
+latest = read_contracts()
 
 # %% [markdown]
 # ### CONNECT TO ETHEREUM GATEWAY
