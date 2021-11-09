@@ -1,6 +1,7 @@
 # CUSTOM:
 # This starts the measurement modes for all sensors
 # This should be added to /etc/rc.local
-cd /home/pi/IoT-Microservice/app/oracle/ && ./sps30_start_measurement.py
-cd /home/pi/IoT-Microservice/app/oracle/ && ./scd30_setup.py
-cd /home/pi/IoT-Microservice/app/oracle/ &6 ./scd41_setup.py
+cd /home/pi/git-repos/IoT-Microservice/app/oracle/ && ./sps30_start_measurement.py
+cd /home/pi/git-repos/IoT-Microservice/app/oracle/ && ./scd30_setup.py
+cd /home/pi/git-repos/IoT-Microservice/app/oracle/ &6 ./scd41_setup.py
+cd /home/pi/git-repos/IoT-Microservice/app/oracle/ && ./scd41_setup.py

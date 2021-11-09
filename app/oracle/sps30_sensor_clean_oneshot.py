@@ -1,4 +1,4 @@
-#!/home/pi/IoT-Microservice/venv/bin/python3
+#!/home/pi/git-repos/IoT-Microservice/venv/bin/python3
 # CHANGE PYTHON PATH TO MATCH YOUR LOCAL INSTALLATION
 import time
 from sps30_driver import sps30

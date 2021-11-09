@@ -1,4 +1,4 @@
-#!/home/pi/IoT-Microservice/venv/bin/python3
+#!/home/pi/git-repos/IoT-Microservice/venv/bin/python3
 from eeManager import write_keys_to_file, generate_private_public_keys
 import os
 
