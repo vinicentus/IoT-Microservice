@@ -239,11 +239,11 @@ def perform_task(task, func):
     params = task_contract.read('params')
     decoded = utils.decode(params)
 
-    # PERFORM ORACLE TASK
-    result = func(task, decoded)
-
-    # SUBMIT THE TASK RESULT
     try:
+        # PERFORM ORACLE TASK
+        result = func(task, decoded)
+
+        # SUBMIT THE TASK RESULT
         task_manager.write({
             'func': 'complete',
             'params': [task, result]
