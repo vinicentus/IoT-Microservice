@@ -8,7 +8,7 @@ from dbManager import add_entry_scd30, convertTimeStampToUTCString
 scd30 = SCD30()
 
 if scd30.get_data_ready():
-    timestamp = convertTimeStampToUTCString(datetime.utcnow())
+    timestamp = convertTimeStampToUTCString(datetime.now())
     m = scd30.read_measurement()
 
     if m is not None:

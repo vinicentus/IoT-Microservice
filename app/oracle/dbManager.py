@@ -123,6 +123,8 @@ def get_all_entries(tableName="sps30_output"):
     return records
 
 
+# If no tz data is specified, or it it invalid,
+# then this method assumes that is in local time.
 def convertTimeStampToUTCString(datetime: datetime):
     # Used to convert a datetime object to the correct string format for passing to db.
     # Example: 2021-07-29T10:18:03Z

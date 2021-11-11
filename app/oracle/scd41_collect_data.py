@@ -13,7 +13,7 @@ i2c.sensirion_i2c_hal_init()
 scd41.scd4x_measure_single_shot()
 
 if scd41.scd4x_get_data_ready_status():
-    timestamp = convertTimeStampToUTCString(datetime.utcnow())
+    timestamp = convertTimeStampToUTCString(datetime.now())
     m = scd41.scd4x_read_measurement()
 
     if m is not None:
