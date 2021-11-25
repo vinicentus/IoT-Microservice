@@ -130,28 +130,6 @@ backlog = utils.filter_backlog(raw)
 active = oracle.read('active')
 
 
-# ### GLOBAL DISCOVERY STATUS
-
-# In[ ]:
-
-
-discoverable = oracle.read('discoverable')
-
-
-# ### GLOBAL DISCOVERY CONFIG
-
-# In[ ]:
-
-
-encoded = oracle.read('config')
-
-
-# In[ ]:
-
-
-discovery_config = utils.decode(encoded)
-
-
 # ### UDATE DEVICE STATUS & DETAILS
 
 # In[ ]:
@@ -161,14 +139,10 @@ def update_details():
 
     # FETCH GLOBAL VARS
     global active
-    global discoverable
-    global discovery_config
     global backlog
 
     # EXTRACT RELEVANT VALUES
     latest_active = oracle.read('active')
-    latest_discoverable = oracle.read('discoverable')
-    latest_config = utils.decode(oracle.read('config'))
 
     # IF ACTIVE STATUS HAS CHANGED
     if (latest_active != active):
@@ -178,24 +152,6 @@ def update_details():
 
         # SEND MSG
         print('ACTIVE STATUS CHANGED TO:', latest_active)
-
-    # IF DISCOVERABLE STATUS HAS CHANGED
-    if (latest_discoverable != discoverable):
-
-        # UPDATE ACTIVE STATUS
-        discoverable = latest_discoverable
-
-        # SEND MSG
-        print('DISCOVERABLE STATUS CHANGED TO:', latest_discoverable)
-
-    # IF DISCOVERABLE STATUS HAS CHANGED
-    if (latest_config != discovery_config):
-
-        # UPDATE ACTIVE STATUS
-        discovery_config = latest_config
-
-        # SEND MSG
-        print('DISCOVERY CONFIG CHANGED')
 
     # UPDATE BACKLOG
     raw_backlog = oracle.read('fetch_backlog')
@@ -257,63 +213,6 @@ def perform_task(task, func):
                             'params': [task, errorString]})
         # SHOW MSG
         print(errorString)
-
-
-# ### DISCOVERY RESPONSES
-
-# In[ ]:
-
-
-def process_message(event):
-
-    # SERIALIZE EVENT PARAMS
-    author = web3.toHex(event['sig'])
-    payload = web3.toText(event['payload'])
-
-    # DECODE THE PAYLOAD
-    data = utils.decode(payload)
-
-    # REQUIRED KEYS FOR VALID MESSAGE
-    required = ['type', 'discovery']
-
-    # DECODED KEYS
-    keys = list(data.keys())
-
-    # THE REQUEST KEYWORD FOR THE PAYLOAD TYPE
-    keyword = 'request'
-
-    # IF THE KEYSETS MATCH & THE TYPE IS A REQUEST
-    if (required == keys and data['type'] == keyword):
-
-        # CHECK MATCHES IN DISCOVERY PARAMS
-        discovery_result = utils.compare_discovery(
-            data['discovery'], discovery_config)
-
-        # IF EVERYTHING MATCHED
-        if (discovery_result.count(False) == 0):
-
-            # SHOW MSG
-            print('DISCOVERY REQUEST DETECTED')
-
-            # ENCODE A JSON RESPONSE
-            response = utils.encode({
-                'type': 'response',
-                'source': payload,
-                'oracle': oracle.unique_id
-            })
-
-            # SLEEP FOR 2 SECONDS
-            time.sleep(2)
-
-            # RESPOND TO REQUEST
-            shh.post({
-                'symKeyID': device_settings['whisper']['symkey'],
-                'payload': web3.toHex(text=response),
-                'topic': web3.toHex(text=device_settings['whisper']['topic']),
-                'sig': whisper_id,
-                'powTarget': 2.5,
-                'powTime': 2
-            })
 
 
 # ### CONTRACT EVENTS
