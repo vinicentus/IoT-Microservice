@@ -146,5 +146,10 @@ app/resources/contracts/
 # database
 sensor_data.db
 
+# temporay database copy (for upload to storj)
+app/oracle/temp.db
+# storj secrets
+app/oracle/storj_test_constants.py
+
 measurement_samples.csv
 big_data_sample.csv
