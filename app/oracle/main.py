@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from . import serviceManager as sm
+from . import storj_test as storj_manager
 # ### PERFORM THE TASK
 
 # In[1]:
@@ -14,8 +15,8 @@ def perform_task(task, params):
         # Check for invalid data
         # In the future we might want to start rate limiting if we get many tasks with invalid parameters.
         # TODO: we should probably retry some tasks
-        data = sm.execute(**params)
-        print(type(data))
+        # data = sm.execute(**params)
+        data = storj_manager.execute_storj() # Use experimental storj service manager TODO: add params
         return data
     except TypeError as error:
         # TODO: format this as base64 and possibly encrypt it as well!

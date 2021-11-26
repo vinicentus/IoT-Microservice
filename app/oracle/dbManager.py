@@ -8,6 +8,19 @@ path = os.path.dirname(os.path.abspath(__file__))
 db = os.path.join(path, 'sensor_data.db')
 
 
+# TODO: make so that you can use "with create_temp_db_copy():" (or similar) to operate on the db copy while it exists, and then delete it
+def create_temp_db_copy(outputPath: str):
+    # Don't overwrite the existing database!
+    assert outputPath != db
+
+    connection = sqlite3.connect(db)
+    backup = sqlite3.connect(outputPath)
+    with backup:
+        connection.backup(backup)
+    backup.close()
+    connection.close()
+
+
 def add_entry_svm30(event_datetime, co2, tvoc):
     sqliteConnection = sqlite3.connect(db)
     cursor = sqliteConnection.cursor()
