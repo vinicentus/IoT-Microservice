@@ -1,4 +1,4 @@
-# Most of this file was recklessly originally copied from https://github.com/storj-thirdparty/uplink-python/blob/master/uplink_python/hello_storj.py
+# Most of this file was mostly copied from https://github.com/storj-thirdparty/uplink-python/blob/master/uplink_python/hello_storj.py
 # TODO: rewrite this file from sratch
 
 import sqlite3
@@ -12,7 +12,7 @@ from datetime import datetime
 from uplink_python.errors import StorjException, BucketNotEmptyError, BucketNotFoundError
 from uplink_python.module_classes import ListObjectsOptions, Permission, SharePrefix
 from uplink_python.uplink import Uplink
-from .storj_test_constants import MY_API_KEY, MY_SATELLITE, MY_ENCRYPTION_PASSPHRASE
+from .storj_test_constants import my_access
 
 
 MY_BUCKET = "iot-microservice"
@@ -55,10 +55,9 @@ def upload_to_storj():  # TODO: throw or return eceptions in thyis function, so 
         uplink = Uplink()
 
         # request access using passphrase
-        print("\nRequesting Access using passphrase...")
-        access = uplink.request_access_with_passphrase(MY_SATELLITE, MY_API_KEY,
-                                                       MY_ENCRYPTION_PASSPHRASE)
-        print("Request Access: SUCCESS!")
+        print("parsing Access ...")
+        access = uplink.parse_access(my_access)
+        print("Parse Access: SUCCESS!")
 
         # open Storj project
         print("\nOpening the Storj project, corresponding to the parsed Access...")
@@ -82,7 +81,7 @@ def upload_to_storj():  # TODO: throw or return eceptions in thyis function, so 
         file_handle.close()
         print("Upload: COMPLETE!")
 
-        # close given project with shared Access
+        # close given project
         print("\nClosing Storj project...")
         project.close()
         print("Project CLOSED!")
@@ -91,7 +90,6 @@ def upload_to_storj():  # TODO: throw or return eceptions in thyis function, so 
 
 
 if __name__ == "__main__":
-    # Backup the current db the right way, respecting db lock status
     dbManager.create_temp_db_copy(SRC_FULL_FILENAME)
 
     upload_to_storj()

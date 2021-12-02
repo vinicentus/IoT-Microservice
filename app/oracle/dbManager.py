@@ -9,6 +9,7 @@ db = os.path.join(path, 'sensor_data.db')
 
 
 # TODO: make so that you can use "with create_temp_db_copy():" (or similar) to operate on the db copy while it exists, and then delete it
+# Backup the current db the right way, respecting db lock status
 def create_temp_db_copy(outputPath: str):
     # Don't overwrite the existing database!
     assert outputPath != db
