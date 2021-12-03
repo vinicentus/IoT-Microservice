@@ -30,10 +30,7 @@ def execute_storj():
     dbManager.create_temp_db_copy(SRC_FULL_FILENAME)
 
     # Upload the database as a file to storj
-    upload_to_storj()
-
-    # complete the task after the data has been uploaded to storj
-    data = "Successfully uploaded to storj"
+    return_value = upload_to_storj()
 
     # # ENCRYPTION & ENCODING
     # if public_key is not None:
@@ -45,7 +42,7 @@ def execute_storj():
     # else:
     #     data = eeManager.encode_base64(data)
 
-    return data
+    return return_value
 
 
 def upload_to_storj():  # TODO: throw or return eceptions in thyis function, so we know if everything was uploaded succesfully
@@ -81,10 +78,29 @@ def upload_to_storj():  # TODO: throw or return eceptions in thyis function, so 
         file_handle.close()
         print("Upload: COMPLETE!")
 
+        # create new Access with permissions
+        print("\nCreating new Access...")
+        # set permissions for the new access to be created
+        permissions = Permission(allow_download=True)
+        # set shared prefix as list of dictionaries for the new access to be created
+        shared_prefix = [SharePrefix(bucket=MY_BUCKET, prefix="temp.db")]
+        # create new access
+        new_access = access.share(permissions, shared_prefix)
+        print("New Access: CREATED!")
+
+        # generate serialized access to share
+        # This includes the decryption key and access token (of sorts)
+        print("\nGenerating serialized Access...")
+        serialized_access: str = access.serialize()
+        print("Serialized shareable Access: ", serialized_access)
+
         # close given project
         print("\nClosing Storj project...")
         project.close()
         print("Project CLOSED!")
+
+        return serialized_access
+
     except StorjException as exception:
         print("Exception Caught: ", exception.details)
 
