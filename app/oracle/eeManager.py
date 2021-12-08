@@ -60,7 +60,7 @@ class Encryptor:
     Encryptor Class desc.
     """
 
-    def __init__(self, data_to_encrypt, asym_pub_key):
+    def __init__(self, data_to_encrypt: bytes, asym_pub_key: rsa.RSAPrivateKey):
         """
         Constructor.
         """
@@ -99,8 +99,8 @@ class Encryptor:
         encrypted_key = self.asym_pub_key.encrypt(
             self.sym_key,
             padding.OAEP(
-                mgf=padding.MGF1(algorithm=hashes.SHA256()),
-                algorithm=hashes.SHA256(),
+                mgf=padding.MGF1(algorithm=hashes.SHA1()),
+                algorithm=hashes.SHA1(),
                 label=None
             ))
 
@@ -134,8 +134,8 @@ class Decryptor:
         decrypted_data = self.asym_private_key.decrypt(
             self.encrypted_sym_key,
             padding.OAEP(
-                mgf=padding.MGF1(algorithm=hashes.SHA256()),
-                algorithm=hashes.SHA256(),
+                mgf=padding.MGF1(algorithm=hashes.SHA1()),
+                algorithm=hashes.SHA1(),
                 label=None
             ))
 
@@ -159,7 +159,9 @@ def encode_base64_key_and_data(key, data):
     Desc
     """
     # CONVERT key AND data FROM BYTES -> STRING
-    key_bytes_to_string = key.decode('latin1')
+
+    # convert bytes to base64 string
+    key_bytes_to_string = base64.b64encode(key).decode()
     data_bytes_to_string = data.decode()
 
     # CREATE DICT OBJECT
@@ -180,7 +182,8 @@ def decode_base64_key_and_data(base64_string):
     """
     data = decode_base64(base64_string)
 
-    key_to_bytes = data['key'].encode('latin1')
+    # convert key from base64 string to bytes
+    key_to_bytes = base64.decode(data['key']).encode()
     data_to_bytes = data['data'].encode()
 
     return key_to_bytes, data_to_bytes
@@ -192,6 +195,12 @@ def load_public_key(path):
             key_file.read(),
             backend=default_backend())
         return public_key
+
+
+def serialize_public_key_bytes(data: str) -> rsa.RSAPublicKey:
+    bytes_data = bytes(str(data), 'utf-8')
+    public_key = serialization.load_pem_public_key(bytes_data)
+    return public_key
 
 
 def load_private_key(path):

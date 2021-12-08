@@ -1,24 +1,15 @@
 #!/home/pi/git-repos/IoT-Microservice/venv/bin/python3
+import json
 import time
 import ast
 import argparse
 from datetime import datetime, timedelta, timezone
+from cryptography.hazmat.primitives.asymmetric import rsa
 from dateutil import parser
-#from dbManager import get_entries_date_range, get_entries_from_date
-#from eeManager import Encryptor, load_public_key, encode_base64_key_and_data, encode_base64
-
 from . import dbManager
 from . import eeManager
-# USED TO DEMO DECRYPTION
-#from eeManager import Decryptor, load_private_key, decode_base64_key_and_data
 
-from pathlib import Path
-this_dir = Path(__file__).parent
 
-the_key = eeManager.load_public_key(
-    this_dir/'secrets/public_key.pem')  # REMOVE BEFORE IMPLEMENTING
-the_secret = eeManager.load_private_key(
-    this_dir/'secrets/private_key.pem')  # REMOVE BEFORE IMPLEMENTING
 max_day_range = 60
 
 
@@ -35,13 +26,13 @@ def datetime_compare(timestamp1: datetime, timestamp2: datetime):
     return delta.total_seconds()
 
 
-def execute(_start_time: str, _stop_time: str, public_key=None, tableName="sps30_output"):
+def execute(_start_time: str, _stop_time: str, public_key: str = None, tableName: str = "sps30_output"):
     """
     Function that fetches data entries from database. If public_key is provided data is encrypted and then encoded.
     If no key is provided the data is only encoded.
     :param _start_time: start date formatted as an ISO-860 string
     :param _stop_time: stop date formatted as an ISO-860 string
-    :param public_key:
+    :param public_key: pem file (in string format) containing RSA public key
     :return: encoded data.
     """
 
@@ -88,8 +79,14 @@ def execute(_start_time: str, _stop_time: str, public_key=None, tableName="sps30
 
     # ENCRYPTION & ENCODING
     if public_key is not None:
-        bytes_data = bytes(str(data), 'utf-8')
-        encryptor = eeManager.Encryptor(bytes_data, public_key)
+        # Encode data as json before encrypting
+        to_json_string = json.dumps(data)
+        bytes_data = bytes(str(to_json_string), 'utf-8')
+
+        rsa_object = eeManager.serialize_public_key_bytes(public_key)
+
+        encryptor = eeManager.Encryptor(bytes_data, rsa_object)
+
         data = eeManager.encode_base64_key_and_data(
             *encryptor.return_key_and_data())
 
@@ -100,20 +97,31 @@ def execute(_start_time: str, _stop_time: str, public_key=None, tableName="sps30
     return data
 
 
+# This probably does not work, use encryption_test.py as a simple alternative
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('start')
-    parser.add_argument('stop')
-    args = parser.parse_args()
+    from pathlib import Path
+    this_dir = Path(__file__).parent
+    the_key = eeManager.load_public_key(
+        this_dir/'secrets/public_key.pem')  # REMOVE BEFORE IMPLEMENTING
+    the_secret = eeManager.load_private_key(
+        this_dir/'secrets/private_key.pem')  # REMOVE BEFORE IMPLEMENTING
+
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('start')
+    # parser.add_argument('stop')
+    # args = parser.parse_args()
+    args = '2021-08-23T00:00:01Z', '2021-08-23T00:10:01Z'
 
     # We don't need to parse the input here,
     # instead we expect a correctly formatted ISO-8601 datetime string,
     # that will be parsed in the excecute function
-    runtime = execute(args.start, args.stop, the_key)
+    # runtime = execute(args.start, args.stop, the_key)
+    runtime = execute(*args, the_key, 'scd41_output')
     print(runtime)
 
     sym_key, data = eeManager.decode_base64_key_and_data(runtime)
     decryptor = eeManager.Decryptor(data, sym_key, the_secret)
     x, y = decryptor.return_key_and_data()
-    res = ast.literal_eval(y.decode('utf-8'))
+    res = y.decode('utf-8')
+    print(x)
     print(res)
