@@ -12,7 +12,7 @@ from datetime import datetime
 from uplink_python.errors import StorjException, BucketNotEmptyError, BucketNotFoundError
 from uplink_python.module_classes import ListObjectsOptions, Permission, SharePrefix
 from uplink_python.uplink import Uplink
-from .storj_test_constants import my_access
+from .storj_constants import my_access
 
 
 MY_BUCKET = "iot-microservice"
