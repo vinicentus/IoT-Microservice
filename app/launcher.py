@@ -207,6 +207,7 @@ def perform_task(task, func):
         # SHOW MSG
         print('TASK COMPLETED')
     except Exception as e:
+         # TODO: don't return error info, because it might be sensitive info?
         errorString = 'TASK COMPLETED WITH ERROR: {}'.format(e)
         # TODO: format this as base64 and possibly encrypt it as well!
         task_manager.write({'func': 'complete',

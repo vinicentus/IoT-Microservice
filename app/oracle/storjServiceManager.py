@@ -1,18 +1,14 @@
-# Most of this file was mostly copied from https://github.com/storj-thirdparty/uplink-python/blob/master/uplink_python/hello_storj.py
-# TODO: rewrite this file from sratch
-
 import sqlite3
 import os
 
 from . import dbManager
 from . import eeManager
 
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from uplink_python.errors import StorjException, BucketNotEmptyError, BucketNotFoundError
-from uplink_python.module_classes import ListObjectsOptions, Permission, SharePrefix
+from uplink_python.module_classes import ListObjectsOptions, Permission, SharePrefix, UploadOptions
 from uplink_python.uplink import Uplink
-from .storj_constants import my_access
 
 
 MY_BUCKET = "iot-microservice"
@@ -22,15 +18,38 @@ MY_STORJ_UPLOAD_PATH = "temp.db"
 path = os.path.dirname(os.path.abspath(__file__))
 SRC_FULL_FILENAME = os.path.join(path, 'temp.db')
 
+# public_key is currently not used, but could be used for encrypting the return value for the task contract (currently none)
+# Note that public_key has nothing to do with the data uploaded to storj
 
-def execute_storj():
+
+def execute_storj(possibly_encrypted_access: str, is_encrypted: bool, public_key: str = None):
     print(SRC_FULL_FILENAME)
 
     # Safely create a copy of our database
     dbManager.create_temp_db_copy(SRC_FULL_FILENAME)
 
-    # Upload the database as a file to storj
-    return_value = upload_to_storj()
+    uplink = Uplink()
+
+    if is_encrypted:
+        # TODO
+        print('uses encryption')
+        access = uplink.parse_access(possibly_encrypted_access)
+    else:
+        access = uplink.parse_access(possibly_encrypted_access)
+
+    project = access.open_project()
+    # There is no documentation for this function, but it uses Unix seconds since epoch
+    # https://github.com/storj/uplink-c/blob/c94970889c5278b4124bb703ab3ef29fbe9a69d4/upload.go#L52
+    # No info about the timezone, assuming UTC... TODO: local
+    # ten_minutes_later = datetime.now(tz=timezone.utc) + timedelta(minutes=10)
+    # options = UploadOptions(expires=int(ten_minutes_later.timestamp()))
+    file_handle = open(SRC_FULL_FILENAME, 'r+b')
+    upload = project.upload_object(
+        MY_BUCKET, MY_STORJ_UPLOAD_PATH)
+    upload.write_file(file_handle)
+    upload.commit()
+    file_handle.close()
+    project.close()
 
     # # ENCRYPTION & ENCODING
     # if public_key is not None:
@@ -42,70 +61,9 @@ def execute_storj():
     # else:
     #     data = eeManager.encode_base64(data)
 
-    return return_value
-
-
-def upload_to_storj():  # TODO: throw or return eceptions in thyis function, so we know if everything was uploaded succesfully
-    # try-except block to catch any storj exception
-    try:
-        # create an object of Uplink class
-        uplink = Uplink()
-
-        # request access using passphrase
-        print("parsing Access ...")
-        access = uplink.parse_access(my_access)
-        print("Parse Access: SUCCESS!")
-
-        # open Storj project
-        print("\nOpening the Storj project, corresponding to the parsed Access...")
-        project = access.open_project()
-        print("Desired Storj project: OPENED!")
-
-        # as an example of 'put' , lets read and upload a local file
-        # upload file/object
-        print("\nUploading data...")
-        # get handle of file to be uploaded
-        file_handle = open(SRC_FULL_FILENAME, 'r+b')
-        # get upload handle to specified bucket and upload file path
-        upload = project.upload_object(MY_BUCKET, MY_STORJ_UPLOAD_PATH)
-
-        # upload file on storj
-        upload.write_file(file_handle)
-
-        # commit the upload
-        upload.commit()
-        # close file handle
-        file_handle.close()
-        print("Upload: COMPLETE!")
-
-        # create new Access with permissions
-        print("\nCreating new Access...")
-        # set permissions for the new access to be created
-        permissions = Permission(allow_download=True)
-        # set shared prefix as list of dictionaries for the new access to be created
-        shared_prefix = [SharePrefix(bucket=MY_BUCKET, prefix="temp.db")]
-        # create new access
-        new_access = access.share(permissions, shared_prefix)
-        print("New Access: CREATED!")
-
-        # generate serialized access to share
-        # This includes the decryption key and access token (of sorts)
-        print("\nGenerating serialized Access...")
-        serialized_access: str = access.serialize()
-        print("Serialized shareable Access: ", serialized_access)
-
-        # close given project
-        print("\nClosing Storj project...")
-        project.close()
-        print("Project CLOSED!")
-
-        return serialized_access
-
-    except StorjException as exception:
-        print("Exception Caught: ", exception.details)
+    # A return value of type str is needed, because that will be the value used to complete the underlying task contract
+    return 'Successfully uploaded data to storj!'
 
 
 if __name__ == "__main__":
-    dbManager.create_temp_db_copy(SRC_FULL_FILENAME)
-
-    upload_to_storj()
+    execute_storj()
