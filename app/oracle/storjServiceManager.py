@@ -40,12 +40,12 @@ def execute_storj(possibly_encrypted_access: str, is_encrypted: bool, public_key
     project = access.open_project()
     # There is no documentation for this function, but it uses Unix seconds since epoch
     # https://github.com/storj/uplink-c/blob/c94970889c5278b4124bb703ab3ef29fbe9a69d4/upload.go#L52
-    # No info about the timezone, assuming UTC... TODO: local
-    # ten_minutes_later = datetime.now(tz=timezone.utc) + timedelta(minutes=10)
-    # options = UploadOptions(expires=int(ten_minutes_later.timestamp()))
+    # The timezone required seems to be local
+    five_minutes_later = datetime.now() + timedelta(minutes=5)
+    options = UploadOptions(expires=int(five_minutes_later.timestamp()))
     file_handle = open(SRC_FULL_FILENAME, 'r+b')
     upload = project.upload_object(
-        MY_BUCKET, MY_STORJ_UPLOAD_PATH)
+        MY_BUCKET, MY_STORJ_UPLOAD_PATH, options)
     upload.write_file(file_handle)
     upload.commit()
     file_handle.close()
