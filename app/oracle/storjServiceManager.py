@@ -4,10 +4,10 @@ import os
 from . import dbManager
 from . import eeManager
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
-from uplink_python.errors import StorjException, BucketNotEmptyError, BucketNotFoundError
-from uplink_python.module_classes import ListObjectsOptions, Permission, SharePrefix, UploadOptions
+from uplink_python.errors import StorjException
+from uplink_python.module_classes import UploadOptions
 from uplink_python.uplink import Uplink
 
 
@@ -47,7 +47,14 @@ def execute_storj(possibly_encrypted_access: str, is_encrypted: bool, public_key
     upload = project.upload_object(
         MY_BUCKET, MY_STORJ_UPLOAD_PATH, options)
     upload.write_file(file_handle)
-    upload.commit()
+
+    try:
+        upload.commit()
+    except StorjException as error:
+        # Localy print the error so we know what went wrong...
+        print(error.code, error.message, error.details)
+        raise
+
     file_handle.close()
     project.close()
 
