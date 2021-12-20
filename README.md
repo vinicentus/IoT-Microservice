@@ -1,6 +1,58 @@
 # IoT-Microservice
+This is software intended to run on an IoT device to allow management remotely but indirecty from a user interface, over ethereum.
+This is part of... TODO links here
+Assumes follonwng sensors: TODO
+## Getting started
 
-## Thesis Project
+It is assumed that this is run on a raspberry pi running Raspberry Pi OS. This is the platform that it was tested on.
+This repository would work on ubuntu or similar, but if you wish to run the corresponding UI locally on the device using flutter-pi, that might not work.
 
-This is part of a decentralized IoT microservice. It utilizes a custom built driver for the Senserion SPS30 Particulate Matter Sensor, 
-SQlite for the Edge IoT database and Python scripts for managing the service.
+### Prerequisites
+A raspberry Pi with any of the suppoertd sensors isntalled.
+
+python3
+
+a running [geth ethereum chain](https://github.com/vinicentus/geth-docker)
+
+An already deployed version of [Smart Contract Backend](https://github.com/vinicentus/oracle-manager). We need the files from this contract deployment because they contain their ABI and the addresses they have been deplyed to. This is generated automatically when deploying using truffle.
+
+### Installation steps
+
+* clone the repository, recursively with sumbodules, into a folder of your choice `git clone --recurse-submodules`.
+
+* create a python venv and activate `python -m venv venv`, `source venv/bin/activate`
+
+* if using the SCD41:
+    * run [build.py](app/oracle/raspberry_pi_i2c_scd4x_python/build.py). This compiles the driver 
+
+* if using SCD30:
+    * TODO: (follow driver installation instructions)
+
+* install all dependencies using `pip install –r requirements.txt`
+
+* create the folder `app/oracle/secrets`
+
+* generate RSA keys, run [generate_pems.py](app/oracle/generate_pems.py)
+
+* change the shebang of all files that contain this line: `#!/home/pi/git-repos/IoT-Microservice/venv/bin/python3` to match your specific environment, this is needed for the next steps to work
+
+* add the lines corresponding to your used sensors to `/etc/rc.local` from [rc.local](app/rc.local)
+    * Remember to edit the paths to math your environment
+    * run manually or restart device
+
+* add necessary lines to crontab, run `sudo crontab -e`, then copy over the lines corresponding to your used sensors from [crontab](app/crontab). The crontabs should be active after saving and exiting the text editor.
+    * Remember to edit the paths to match your environment
+
+* copy over the the contracts folder with all the generated json ABI files from the deployment process into `app/resources/contracts/`. It should now contain a json file for every single contract, every file containing its ABI and its address
+
+### First time run
+* activate your python venv if not already activated
+
+* initialize smart contracts by `python3 init.py`
+
+* Generate a config file for this device from the [UI](https://github.com/vinicentus/flutter_iot_ui) and copy it over to [device_settings.yaml](app/resources/device_settings.yaml), or edit the values already present.
+
+* edit the [init_settings.yaml](app/resources/init_settings.yaml) file to match the network configuration, but use a separate ethereum key that is also used by the geth node that deploys the contracts, see node4 in [geth-docker](https://github.com/vinicentus/geth-docker)
+ 
+### How to run
+After initializing the smart contracts above, and configuring them using the [UI](https://github.com/vinicentus/flutter_iot_ui), you can start the main service that performs tasks using `python3 launcher.py`
