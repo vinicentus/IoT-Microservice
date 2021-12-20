@@ -49,14 +49,16 @@ An already deployed version of [Smart Contract Backend](https://github.com/vinic
 
 * copy over the the contracts folder with all the generated json ABI files from the deployment process into `app/resources/contracts/`. It should now contain a json file for every single contract, every file containing its ABI and its address
 
+* edit the [init_settings.yaml](app/resources/init_settings.yaml) file to match the network configuration. The ethereum key used here must be, (and is by default), the same key that is used by the geth node that deploys the contracts, see node4 in [geth-docker](https://github.com/vinicentus/geth-docker). If you changed that key, copy it over to this file.
+
+There are some additional setup steps that are detailed in the readme file of the [management UI](https://github.com/vinicentus/flutter_iot_ui).
 ### First time run
 * activate your python venv if not already activated
 
 * initialize smart contracts by `python3 init.py`
 
 * Generate a config file for this device from the [UI](https://github.com/vinicentus/flutter_iot_ui) and copy it over to [device_settings.yaml](app/resources/device_settings.yaml), or edit the values already present.
-
-* edit the [init_settings.yaml](app/resources/init_settings.yaml) file to match the network configuration, but use a separate ethereum key that is also used by the geth node that deploys the contracts, see node4 in [geth-docker](https://github.com/vinicentus/geth-docker)
+    * If editing this yourself, make sure to use the same ethereum key and public address as for the UI. If you didn't already change it in the User Interface's `settings.json` file, then make sure to change this from the default value in both places.
  
 ### How to run
 After initializing the smart contracts above, and configuring them using the [UI](https://github.com/vinicentus/flutter_iot_ui), you can start the main service that performs tasks using `python3 launcher.py`
