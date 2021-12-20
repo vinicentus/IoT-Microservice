@@ -14,7 +14,7 @@ Any of the following sensors connected and installed:
 * sensorion SVM30, connected through a sensirion sensor bridge, that is connected thourgh USB
     *  This has very limited support and is not recommended
 
-python3
+python3, sqlite3 (both are either installed by default or can be installed using apt)
 
 a running [geth ethereum chain](https://github.com/vinicentus/geth-docker)
 
