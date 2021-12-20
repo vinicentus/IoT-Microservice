@@ -41,8 +41,8 @@ An already deployed version of [Smart Contract Backend](https://github.com/vinic
 * change the shebang of all files that contain this line: `#!/home/pi/git-repos/IoT-Microservice/venv/bin/python3` to match your specific environment, this is needed for the next steps to work
 
 * add the lines corresponding to your used sensors to `/etc/rc.local` from [rc.local](app/rc.local)
-    * Remember to edit the paths to math your environment
-    * run manually or restart device
+    * Remember to edit the paths to match your environment
+    * run the added lines manually or restart device to make the changes take effect
 
 * add necessary lines to crontab, run `sudo crontab -e`, then copy over the lines corresponding to your used sensors from [crontab](app/crontab). The crontabs should be active after saving and exiting the text editor.
     * Remember to edit the paths to match your environment
