@@ -1,14 +1,18 @@
 # IoT-Microservice
 This is software intended to run on an IoT device to allow management remotely but indirecty from a user interface, over ethereum.
-This is part of... TODO links here
-Assumes follonwng sensors: TODO
+This is intended to be used with an [management UI](https://github.com/vinicentus/flutter_iot_ui) for the devices running this software. It interacts with a [private ethereum network](https://github.com/vinicentus/geth-docker) and [smart contracts deployed on it](https://github.com/vinicentus/oracle-manager). 
+
+This software will run on a Raspberry PI with vrious sensors connected. It will preiodicaly store measurements from those sensors and send them to a User Interface when requested.
 ## Getting started
 
-It is assumed that this is run on a raspberry pi running Raspberry Pi OS. This is the platform that it was tested on.
-This repository would work on ubuntu or similar, but if you wish to run the corresponding UI locally on the device using flutter-pi, that might not work.
-
 ### Prerequisites
-A raspberry Pi with any of the suppoertd sensors isntalled.
+A raspberry Pi running Raspberry Pi OS.
+Any of the following sensors connected and installed:
+* Sensirion SCD30, connected direclty to GPIO pins using i2c
+* Sensirion SCD41, connected directly to GPIO pins using i2c
+* Sensirion SPS30, connected through USB
+* sensorion SVM30, connected through a sensirion sensor bridge, that is connected thourgh USB
+    *  This has very limited support and is not recommended
 
 python3
 
