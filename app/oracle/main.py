@@ -1,6 +1,3 @@
-#!/home/pi/git-repos/IoT-Microservice/venv/bin/python3
-# coding: utf-8
-
 from . import serviceManager as sm
 from . import storjServiceManager as storj_manager
 # ### PERFORM THE TASK

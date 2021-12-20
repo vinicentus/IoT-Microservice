@@ -1,4 +1,3 @@
-# coding: utf-8
 """
     A python library for control of the Sensirion SPS30 Particulate Matter Sensor.
 

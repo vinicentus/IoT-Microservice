@@ -1,4 +1,3 @@
-#!/home/pi/git-repos/IoT-Microservice/venv/bin/python3
 import json
 import time
 import ast
