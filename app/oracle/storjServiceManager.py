@@ -1,5 +1,7 @@
-import sqlite3
+from pathlib import Path
 import os
+
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
 
 from . import dbManager
 from . import eeManager
@@ -18,11 +20,10 @@ MY_STORJ_UPLOAD_PATH = "temp.db"
 path = os.path.dirname(os.path.abspath(__file__))
 SRC_FULL_FILENAME = os.path.join(path, 'temp.db')
 
-# public_key is currently not used, but could be used for encrypting the return value for the task contract (currently none)
-# Note that public_key has nothing to do with the data uploaded to storj
 
-
-def execute_storj(possibly_encrypted_access: str, is_encrypted: bool, public_key: str = None):
+# If the access is encrypted, then it is really a base64 encoded json map with key and data params,
+# that can be decoded with eeManager.decode_base64_key_and_data()
+def execute_storj(possibly_encrypted_access: str, is_encrypted: bool):
     print(SRC_FULL_FILENAME)
 
     # Safely create a copy of our database
@@ -31,9 +32,23 @@ def execute_storj(possibly_encrypted_access: str, is_encrypted: bool, public_key
     uplink = Uplink()
 
     if is_encrypted:
-        # TODO
         print('uses encryption')
-        access = uplink.parse_access(possibly_encrypted_access)
+
+        # Load private RSA key to decrypt
+        this_dir = Path(__file__).parent
+        the_secret: RSAPrivateKey = eeManager.load_private_key(
+            this_dir/'secrets/private_key.pem')
+        # Load data and asymmetrically encrypted fernet key
+        key_bytes, data_bytes = eeManager.decode_base64_key_and_data(
+            possibly_encrypted_access)
+        # Decrypt
+        decryptor = eeManager.Decryptor(
+            data_bytes, key_bytes, the_secret)
+        decrypted_access = decryptor.decrypted_data
+
+        access_string = decrypted_access.decode()
+
+        access = uplink.parse_access(access_string)
     else:
         access = uplink.parse_access(possibly_encrypted_access)
 
