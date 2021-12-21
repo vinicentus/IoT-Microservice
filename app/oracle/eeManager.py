@@ -182,7 +182,7 @@ def decode_base64_key_and_data(base64_string):
     data = decode_base64(base64_string)
 
     # convert key from base64 string to bytes
-    key_to_bytes = base64.decode(data['key']).encode()
+    key_to_bytes = base64.b64decode(data['key'].encode())
     data_to_bytes = data['data'].encode()
 
     return key_to_bytes, data_to_bytes
