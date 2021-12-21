@@ -2,7 +2,11 @@
 This is software intended to run on an IoT device to allow management remotely but indirecty from a user interface, over ethereum.
 This is intended to be used with an [management UI](https://github.com/vinicentus/flutter_iot_ui) for the devices running this software. It interacts with a [private ethereum network](https://github.com/vinicentus/geth-docker) and [smart contracts deployed on it](https://github.com/vinicentus/oracle-manager). 
 
-This software will run on a Raspberry PI with vrious sensors connected. It will preiodicaly store measurements from those sensors and send them to a User Interface when requested.
+This software will run on a Raspberry Pi with vrious sensors connected. It will preiodicaly store measurements from those sensors and send them to a User Interface when requested.
+
+Here is a diagram of the data flow when using storj as the backend:
+![image](/docs/big%20storj%20sequence%20diagram.png)
+
 ## Getting started
 
 ### Prerequisites
@@ -47,7 +51,7 @@ An already deployed version of [Smart Contract Backend](https://github.com/vinic
 * add necessary lines to crontab, run `sudo crontab -e`, then copy over the lines corresponding to your used sensors from [crontab](app/crontab). The crontabs should be active after saving and exiting the text editor.
     * Remember to edit the paths to match your environment
 
-* copy over the the contracts folder with all the generated json ABI files from the deployment process into `app/resources/contracts/`. It should now contain a json file for every single contract, every file containing its ABI and its address
+* copy over the the contracts folder with all the generated json ABI files from the deployment process into `app/resources/contracts/`. It should now contain a json file for every single contract, containing the contract's ABI and address
 
 * edit the [init_settings.yaml](app/resources/init_settings.yaml) file to match the network configuration. The ethereum key used here must be, (and is by default), the same key that is used by the geth node that deploys the contracts, see node4 in [geth-docker](https://github.com/vinicentus/geth-docker). If you changed that key, copy it over to this file.
 
