@@ -2,10 +2,7 @@
 This is software intended to run on an IoT device to allow management remotely but indirecty from a user interface, over ethereum.
 This is intended to be used with an [management UI](https://github.com/vinicentus/flutter_iot_ui) for the devices running this software. It interacts with a [private ethereum network](https://github.com/vinicentus/geth-docker) and [smart contracts deployed on it](https://github.com/vinicentus/oracle-manager). 
 
-This software will run on a Raspberry Pi with vrious sensors connected. It will preiodicaly store measurements from those sensors and send them to a User Interface when requested.
-
-Here is a diagram of the data flow when using storj as the backend:
-![image](/docs/big%20storj%20sequence%20diagram.png)
+This software will run on a Raspberry Pi with various sensors connected. It will preiodicaly store measurements from those sensors and send them to a User Interface when requested.
 
 ## Getting started
 
